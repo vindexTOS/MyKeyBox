@@ -1,26 +1,25 @@
-import { useMutation } from "@tanstack/react-query";
-import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
-  TextInput,
   TouchableOpacity,
   StyleSheet,
   ActivityIndicator,
   Image,
 } from "react-native";
-import { RegistrationPostRequest } from "../../API/Auth";
-import { registrationType } from "../../types/Auth-types";
+import React, { useState } from "react";
 import { ErrorPopup, SuccessPopup } from "../../Components/Status/Status";
+import { registrationType } from "../../types/Auth-types";
+import { useMutation } from "@tanstack/react-query";
+import { RegistrationPostRequest } from "../../API/Auth";
+import { useNavigation } from "@react-navigation/native";
+import AuthInput from "../../Components/Inputs/AuthInput";
 // @ts-ignore
 import Lock from "../../../assets/ICONS/lock.png";
 // @ts-ignore
-import Phone from "../../../assets/ICONS/smartphone.png";
-// @ts-ignore
 import Logo from "../../../assets/ICONS/logo-dark.png";
-import AuthInput from "../../Components/Inputs/AuthInput";
-import { useNavigation } from "@react-navigation/native";
-export default function Registration() {
+// @ts-ignore
+import Mail from "../../../assets/ICONS/mail.png";
+export default function Login() {
   var succsessMsg =
     "Your account will be validated shortly and you will receive a password and login by email";
   var errorMsg = "Something went wrong, contact support";
@@ -33,16 +32,16 @@ export default function Registration() {
 
   const { isPending, isError, isSuccess } = mutation;
 
-  const [PhoneNumber, setPhoneNumber] = useState("");
-  const [BoxUniqueCode, setLockerCode] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPasswored] = useState("");
 
   const handleSignUp = async () => {
     let body = {
-      PhoneNumber,
-      BoxUniqueCode,
+      email,
+      password,
     };
 
-    await mutation.mutateAsync(body);
+    // await mutation.mutateAsync(body);
   };
 
   const cleanUpStatus = () => {
@@ -51,10 +50,8 @@ export default function Registration() {
   return (
     <View style={styles.container}>
       <View style={styles.headerTitle}>
-        <Text style={{ fontSize: 26, fontWeight: "900" }}>
-          Welcome in MyKeyBox
-        </Text>
-        <Text style={{ fontSize: 18 }}> Sigup into your account</Text>
+        <Text style={{ fontSize: 26, fontWeight: "900" }}>Welcome Back</Text>
+        <Text style={{ fontSize: 18 }}> Login back into your account</Text>
       </View>
       {isPending && <ActivityIndicator />}
 
@@ -66,36 +63,51 @@ export default function Registration() {
         <Image style={styles.Logo} source={Logo} />
 
         <Text style={styles.title}>Sign Up</Text>
-        <AuthInput
-          image={Phone}
-          value={PhoneNumber}
-          onChange={setPhoneNumber}
-          placeHolder="Phone Number"
-        />
-        <AuthInput
-          image={Lock}
-          value={BoxUniqueCode}
-          onChange={setLockerCode}
-          placeHolder="Locker Code"
-        />
-
+        <View
+          style={{
+            paddingBottom: 6,
+          }}
+        >
+          <AuthInput
+            image={Mail}
+            value={email}
+            onChange={setEmail}
+            placeHolder="E-mail"
+          />
+          <AuthInput
+            image={Lock}
+            value={password}
+            onChange={setPasswored}
+            placeHolder="Password"
+          />
+          <Text
+            style={{
+              color: "white",
+              marginLeft: 210,
+              fontSize: 15,
+              fontWeight: "700",
+            }}
+          >
+            Forgot Password?
+          </Text>
+        </View>
         <TouchableOpacity style={styles.button} onPress={handleSignUp}>
-          <Text style={styles.buttonText}>Sign Up</Text>
+          <Text style={styles.buttonText}>LOGIN</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.logInTextWrapper}>
-        <Text>Already have an accoutn ? </Text>
+        <Text>Don't have an account yet ? </Text>
         <Text
-          onPress={() => navigation.navigate(`Login`)}
+          onPress={() => navigation.navigate(`Registration`)}
           style={{ fontSize: 18, color: "#2c8ffa", fontWeight: "800" }}
         >
-          Log In
+          Join Now
         </Text>
       </View>
     </View>
   );
 }
-// #2c8ffa
+
 const styles = StyleSheet.create({
   container: {
     display: "flex",
@@ -103,11 +115,11 @@ const styles = StyleSheet.create({
     width: "100%",
     backgroundColor: "white",
     alignItems: "center",
-    justifyContent: "space-between",
+
     paddingTop: 60,
     gap: 20,
   },
-  headerTitle: { marginRight: 70, marginBottom: 30 },
+  headerTitle: { marginRight: 120, marginBottom: 50 },
   Logo: {
     width: 150,
     height: 150,
@@ -136,13 +148,13 @@ const styles = StyleSheet.create({
 
     textAlign: "center",
     marginRight: 170,
-    marginBottom: 90,
+    marginBottom: 40,
   },
 
   button: {
     backgroundColor: "white",
     color: "black",
-
+    marginTop: 10,
     padding: 15,
     borderRadius: 50,
     width: "80%",
