@@ -4,14 +4,17 @@ import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
 import RootNavigation from "./src/Navigation/RootNavigation";
 import TabNavigator from "./src/Navigation/TabNavigator";
+import { UserContextProvider } from "./src/Context/UserContext";
 const queryClient = new QueryClient();
 
 export default function App() {
   return (
     <NavigationContainer>
       <QueryClientProvider client={queryClient}>
-        <RootNavigation />
-        <TabNavigator />
+        <UserContextProvider>
+          <RootNavigation />
+          <TabNavigator />
+        </UserContextProvider>
       </QueryClientProvider>
       {/* <ActivityIndicator /> */}
     </NavigationContainer>

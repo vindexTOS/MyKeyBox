@@ -1,7 +1,7 @@
 import axios from "axios";
-
+import { envirement } from "../envirement/env";
 export const ApiManager = axios.create({
-  baseURL: `https://MyKeyBox.com/Umbraco/Api/`,
+  baseURL: envirement.baseUrl,
   responseType: "json",
   withCredentials: true,
   httpsAgent: {

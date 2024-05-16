@@ -20,7 +20,9 @@ import Phone from "../../../assets/ICONS/smartphone.png";
 import Logo from "../../../assets/ICONS/logo-dark.png";
 import AuthInput from "../../Components/Inputs/AuthInput";
 import { useNavigation } from "@react-navigation/native";
+import { UseUserContext } from "../../Context/UserContext";
 export default function Registration() {
+  const { state } = UseUserContext();
   var succsessMsg =
     "Your account will be validated shortly and you will receive a password and login by email";
   var errorMsg = "Something went wrong, contact support";
@@ -48,6 +50,12 @@ export default function Registration() {
   const cleanUpStatus = () => {
     mutation.reset();
   };
+
+  useEffect(() => {
+    if (state.decodedUser && state.decodedUser.userId) {
+      navigation.navigate("User");
+    }
+  }, [state]);
   return (
     <View style={styles.container}>
       <View style={styles.headerTitle}>
@@ -66,19 +74,24 @@ export default function Registration() {
         <Image style={styles.Logo} source={Logo} />
 
         <Text style={styles.title}>Sign Up</Text>
-        <AuthInput
-          image={Phone}
-          value={PhoneNumber}
-          onChange={setPhoneNumber}
-          placeHolder="Phone Number"
-        />
-        <AuthInput
-          image={Lock}
-          value={BoxUniqueCode}
-          onChange={setLockerCode}
-          placeHolder="Locker Code"
-        />
-
+        <View
+          style={{
+            paddingBottom: 6,
+          }}
+        >
+          <AuthInput
+            image={Phone}
+            value={PhoneNumber}
+            onChange={setPhoneNumber}
+            placeHolder="Phone Number"
+          />
+          <AuthInput
+            image={Lock}
+            value={BoxUniqueCode}
+            onChange={setLockerCode}
+            placeHolder="Locker Code"
+          />
+        </View>
         <TouchableOpacity style={styles.button} onPress={handleSignUp}>
           <Text style={styles.buttonText}>Sign Up</Text>
         </TouchableOpacity>
@@ -103,7 +116,6 @@ const styles = StyleSheet.create({
     width: "100%",
     backgroundColor: "white",
     alignItems: "center",
-    justifyContent: "space-between",
     paddingTop: 60,
     gap: 20,
   },
@@ -136,7 +148,7 @@ const styles = StyleSheet.create({
 
     textAlign: "center",
     marginRight: 170,
-    marginBottom: 90,
+    marginBottom: 60,
   },
 
   button: {

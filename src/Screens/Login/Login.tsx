@@ -6,11 +6,11 @@ import {
   ActivityIndicator,
   Image,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ErrorPopup, SuccessPopup } from "../../Components/Status/Status";
-import { registrationType } from "../../types/Auth-types";
+import { loginType } from "../../types/Auth-types";
 import { useMutation } from "@tanstack/react-query";
-import { RegistrationPostRequest } from "../../API/Auth";
+import { LoginPostRequest } from "../../API/Auth";
 import { useNavigation } from "@react-navigation/native";
 import AuthInput from "../../Components/Inputs/AuthInput";
 // @ts-ignore
@@ -19,13 +19,16 @@ import Lock from "../../../assets/ICONS/lock.png";
 import Logo from "../../../assets/ICONS/logo-dark.png";
 // @ts-ignore
 import Mail from "../../../assets/ICONS/mail.png";
+import { UseUserContext } from "../../Context/UserContext";
 export default function Login() {
+  const { decodeUser } = UseUserContext();
+
   var succsessMsg =
     "Your account will be validated shortly and you will receive a password and login by email";
   var errorMsg = "Something went wrong, contact support";
   const mutation = useMutation({
-    mutationFn: (body: registrationType) => {
-      return RegistrationPostRequest(body);
+    mutationFn: (body: loginType) => {
+      return LoginPostRequest(body);
     },
   });
   const navigation: any = useNavigation();
@@ -37,16 +40,23 @@ export default function Login() {
 
   const handleSignUp = async () => {
     let body = {
-      email,
-      password,
+      Email: email,
+      Password: password,
     };
 
-    // await mutation.mutateAsync(body);
+    await mutation.mutateAsync(body);
+    if (!isError) {
+      decodeUser();
+      setTimeout(() => {
+        navigation.navigate("User");
+      }, 1000);
+    }
   };
 
   const cleanUpStatus = () => {
     mutation.reset();
   };
+
   return (
     <View style={styles.container}>
       <View style={styles.headerTitle}>
@@ -62,7 +72,7 @@ export default function Login() {
       <View style={styles.formWrapper}>
         <Image style={styles.Logo} source={Logo} />
 
-        <Text style={styles.title}>Sign Up</Text>
+        <Text style={styles.title}>Login</Text>
         <View
           style={{
             paddingBottom: 6,
