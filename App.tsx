@@ -20,7 +20,7 @@ export default function App() {
     </NavigationContainer>
   );
 }
-
+// horizontal={true}
 const styles = StyleSheet.create({
   container: {
     flex: 1,

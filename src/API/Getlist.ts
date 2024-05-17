@@ -1,7 +1,12 @@
 import { envirement } from "../envirement/env";
 import { ApiManager } from "./ApiManager";
 
-export const GetBoxesRequest = async (token: string) => {
+export const GetBoxesRequest = async ({
+  queryKey,
+}: {
+  queryKey: any;
+}): Promise<any> => {
+  const token = queryKey[1];
   try {
     const res: any = await ApiManager("/Dealer/GetBoxes", {
       method: "GET",

@@ -1,4 +1,4 @@
-import { View, Text } from "react-native";
+import { View, Text, StyleSheet, Pressable } from "react-native";
 import React, { useEffect } from "react";
 import { UseUserContext } from "../../Context/UserContext";
 import UserNav from "./UserNav";
@@ -9,8 +9,54 @@ export default function User() {
   return (
     <View>
       <UserNav />
+      {state.dropDownLogOut && (
+        <View style={styles.selectDropDown}>
+          <Pressable style={styles.logoutBtn} onPress={logout}>
+            <Text style={styles.logOutText}>Log Out</Text>
+          </Pressable>
+        </View>
+      )}
+
       <List />
-      {/* <Text onPress={logout}>LogOut</Text> */}
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  logoutBtn: {
+    color: "white",
+    alignItems: "center",
+    display: "flex",
+    justifyContent: "center",
+    textAlign: "center",
+    width: "70%",
+    borderRadius: 10,
+    backgroundColor: "orange",
+  },
+  logOutText: {
+    color: "white",
+    fontWeight: "900",
+    fontSize: 18,
+  },
+  selectDropDown: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 10,
+    position: "absolute",
+    zIndex: 3001,
+    top: 100,
+    left: 20,
+    width: 170,
+    height: 50,
+    backgroundColor: "#f8f8ff",
+    shadowColor: "#000000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.16,
+    shadowRadius: 1.51,
+    elevation: 4,
+  },
+});

@@ -23,8 +23,7 @@ import { UseUserContext } from "../../Context/UserContext";
 export default function Login() {
   const { decodeUser } = UseUserContext();
 
-  var succsessMsg =
-    "Your account will be validated shortly and you will receive a password and login by email";
+  var succsessMsg = "You have been logged in";
   var errorMsg = "Something went wrong, contact support";
   const mutation = useMutation({
     mutationFn: (body: loginType) => {
@@ -45,14 +44,17 @@ export default function Login() {
     };
 
     await mutation.mutateAsync(body);
-    if (!isError) {
-      decodeUser();
-      setTimeout(() => {
-        navigation.navigate("User");
-      }, 1000);
-    }
   };
-
+  useEffect(() => {
+    if (!isError) {
+      if (password && email) {
+        decodeUser();
+        setTimeout(() => {
+          navigation.navigate("User");
+        }, 1000);
+      }
+    }
+  }, [isSuccess]);
   const cleanUpStatus = () => {
     mutation.reset();
   };
@@ -66,9 +68,9 @@ export default function Login() {
       {isPending && <ActivityIndicator />}
 
       {isError && <ErrorPopup message={errorMsg} onClose={cleanUpStatus} />}
-      {isSuccess && (
+      {/* {isSuccess && (
         <SuccessPopup message={succsessMsg} onClose={cleanUpStatus} />
-      )}
+      )} */}
       <View style={styles.formWrapper}>
         <Image style={styles.Logo} source={Logo} />
 

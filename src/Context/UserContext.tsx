@@ -15,6 +15,8 @@ type UserContextProviderProps = {
 
 type State = {
   decodedUser: decodedUserType | any;
+  token: string;
+  dropDownLogOut: boolean;
 };
 
 type Action = {
@@ -34,11 +36,17 @@ const Context = createContext<null | Cell>(null);
 export const UserContextProvider = ({ children }: UserContextProviderProps) => {
   const initialState = {
     decodedUser: {},
+    token: "",
+    dropDownLogOut: false,
   };
   const reducer = (state: State, action: Action) => {
     switch (action.type) {
       case "decode_user":
         return { ...state, decodedUser: action.payload };
+      case "set_token":
+        return { ...state, token: action.payload };
+      case "set_drop_down_log_out":
+        return { ...state, dropDownLogOut: action.payload };
       default:
         return state;
     }
@@ -46,10 +54,11 @@ export const UserContextProvider = ({ children }: UserContextProviderProps) => {
 
   const decodeUser = async () => {
     const token = await AsyncStorage.getItem("token");
-
+    console.log(token);
     if (token) {
       const decodedToken: decodedUserType = jwt_decode(token);
       dispatch({ type: "decode_user", payload: decodedToken });
+      dispatch({ type: "set_token", payload: token });
     }
   };
   useEffect(() => {
