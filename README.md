@@ -35,16 +35,18 @@ it will ask you to enter your expo dev account email and password
 this will build aab file for your app on your https://expo.dev/ 
 
 ### step 4:
- download build aab file from https://expo.dev/ ,it would be named ex application-800bd69f-8a8f-441b-9f6b-d15fecd07728.aab   
-save it on apk-convertor folder with bundletool.jar 
+ download build aab file from https://expo.dev/ ,it would be named ex `application-800bd69f-8a8f-441b-9f6b-d15fecd07728.aab  ` 
+save it on `apk-convertor` folder with bundletool.jar 
 
 ### step 5: build APKS file 
 (keep in mind this is not apk file, but apks )
-go to apk-convertor directory and run 
+go to `apk-convertor` directory and run 
  
-```java -jar bundletool.jar build-apks --bundle=filename.aab --output=newfilename.apks --mode=universal```
+```
+java -jar bundletool.jar build-apks --bundle=filename.aab --output=newfilename.apks --mode=universal
+```
  
-(filename.abb should be your expo.dev downloaded aab file, you can name newfilename.apks what ever you want) 
+(`filename.abb` should be your expo.dev downloaded aab file, you can name `newfilename.apks` what ever you want) 
 this will create apks file on your directory
 
 ### step 6: create convertor.json
@@ -61,7 +63,9 @@ this will create apks file on your directory
  you have to generate keystore for apk release 
 run this command on `apk-convertor` directory : 
  
-```keytool -genkeypair -v -keystore my-release-key.jks -keyalg RSA -keysize 2048 -validity 10000 -alias my-key-alias```
+```
+keytool -genkeypair -v -keystore my-release-key.jks -keyalg RSA -keysize 2048 -validity 10000 -alias my-key-alias
+```
  
 it will ask you to create password of 6 cheractors, make it and remember it 
 it will ask you couple of more questions just answere them 
