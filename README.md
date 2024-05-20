@@ -75,7 +75,7 @@ java -jar bundletool.jar build-apks --bundle=myaabname.aab  --output=myapksname.
 ```
 (change myapksname.apks, myaabname.aab and YOUR_KEYPASS with file names and password that you made) 
 
-step 9: Convert APKS to APK
+### step 9: Convert APKS to APK
 (you might need your exect directory names for this, copy your apk-convertor url and rename your this example files with your own file names) 
 run:
 ```
