@@ -62,31 +62,66 @@ export default function Login() {
   const cleanUpStatus = () => {
     mutation.reset();
   };
+  const [isKeyboardVisible, setKeyboardVisible] = useState(false);
 
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      "keyboardDidShow",
+      () => {
+        setKeyboardVisible(true);
+      }
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      "keyboardDidHide",
+      () => {
+        setKeyboardVisible(false);
+      }
+    );
+
+    return () => {
+      keyboardDidHideListener.remove();
+      keyboardDidShowListener.remove();
+    };
+  }, []);
   return (
     <KeyboardAvoidingView
-      style={styles.container}
+      style={
+        !isKeyboardVisible ? styles.container : styles.whenKeyBoardOpenContainer
+      }
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={styles.inner}>
-          <View style={styles.headerTitle}>
-            <Text style={{ fontSize: 26, fontWeight: "900" }}>
-              Welcome Back
-            </Text>
-            <Text style={{ fontSize: 18 }}> Login back into your account</Text>
-          </View>
+        <View
+          style={
+            !isKeyboardVisible ? styles.inner : styles.whenKeyBoardOpenInner
+          }
+        >
+          {!isKeyboardVisible && (
+            <View style={styles.headerTitle}>
+              <Text style={{ fontSize: 26, fontWeight: "900" }}>
+                Welcome Back
+              </Text>
+              <Text style={{ fontSize: 18 }}>Login back into your account</Text>
+            </View>
+          )}
           {isPending && <ActivityIndicator />}
           {isError && <ErrorPopup message={errorMsg} onClose={cleanUpStatus} />}
           {/* {isSuccess && (
         <SuccessPopup message={succsessMsg} onClose={cleanUpStatus} />
       )} */}
-          <View style={styles.formWrapper}>
+          <View
+            style={
+              !isKeyboardVisible
+                ? styles.formWrapper
+                : styles.whenKeyBoardFormWrapper
+            }
+          >
             <Image style={styles.Logo} source={Logo} />
 
             <Text style={styles.title}>Login</Text>
             <View
               style={{
+                position: "relative",
                 paddingBottom: 6,
               }}
             >
@@ -109,7 +144,9 @@ export default function Login() {
                   top: 155,
 
                   color: "white",
-                  marginLeft: 210,
+                  width: "95%",
+
+                  textAlign: "right",
                   fontSize: 15,
                   fontWeight: "700",
                 }}
@@ -125,7 +162,11 @@ export default function Login() {
             <Text>Don't have an account yet ? </Text>
             <Text
               onPress={() => navigation.navigate(`Registration`)}
-              style={{ fontSize: 18, color: "#2c8ffa", fontWeight: "800" }}
+              style={{
+                fontSize: 18,
+                color: isKeyboardVisible ? "#ffbf00" : "#2c8ffa",
+                fontWeight: "800",
+              }}
             >
               Join Now
             </Text>
@@ -141,7 +182,14 @@ const styles = StyleSheet.create({
     display: "flex",
     height: "100%",
     width: "100%",
-    backgroundColor: "white",
+    backgroundColor: "#89cff0",
+    alignItems: "center",
+  },
+  whenKeyBoardOpenContainer: {
+    display: "flex",
+    height: "100%",
+    width: "100%",
+    backgroundColor: "#89cff0",
     alignItems: "center",
   },
   inner: {
@@ -151,6 +199,15 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: "white",
     width: "100%",
+  },
+  whenKeyBoardOpenInner: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 50,
+    backgroundColor: "#2c8ffa",
+    width: "100%",
+    height: "100%",
   },
   headerTitle: { marginRight: 10, marginBottom: 60, width: "100%" },
   Logo: {
@@ -173,6 +230,15 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 90,
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 90,
+  },
+  whenKeyBoardFormWrapper: {
+    position: "relative",
+    backgroundColor: "#2c8ffa",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    height: "70%",
+    width: "100%",
   },
   title: {
     fontSize: 34,
