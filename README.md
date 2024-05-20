@@ -4,11 +4,12 @@
 
 - Expo Dev Account: [Expo Dev](https://expo.dev/)
 - Global Installations:
+  - Node.js: [Node.js](https://nodejs.org/)
   - Expo CLI: `npm i expo-cli`
   - EAS CLI: `npm install -g eas-cli`
   - Java: [Installation Tutorial](https://www.youtube.com/watch?v=SQykK40fFds&t=373s)
-  - AAB Converter: [Google Bundletool Releases](https://github.com/google/bundletool/releases)
-  - Node.js: [Node.js](https://nodejs.org/)
+  - AAB Converter: [Bundletool Releases](https://github.com/google/bundletool/releases)
+
 
 ## Build Setup
 
