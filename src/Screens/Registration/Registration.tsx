@@ -19,7 +19,8 @@ import { ErrorPopup, SuccessPopup } from "../../Components/Status/Status";
 // @ts-ignore
 import Lock from "../../../assets/ICONS/lock.png";
 // @ts-ignore
-import Phone from "../../../assets/ICONS/smartphone.png";
+import Mail from "../../../assets/ICONS/mail.png";
+
 // @ts-ignore
 import Logo from "../../../assets/ICONS/logo-dark.png";
 import AuthInput from "../../Components/Inputs/AuthInput";
@@ -39,12 +40,12 @@ export default function Registration() {
 
   const { isPending, isError, isSuccess } = mutation;
 
-  const [PhoneNumber, setPhoneNumber] = useState("");
+  const [Email, setEmail] = useState("");
   const [BoxUniqueCode, setLockerCode] = useState("");
 
   const handleSignUp = async () => {
     let body = {
-      PhoneNumber,
+      Email,
       BoxUniqueCode,
     };
 
@@ -89,10 +90,10 @@ export default function Registration() {
               }}
             >
               <AuthInput
-                image={Phone}
-                value={PhoneNumber}
-                onChange={setPhoneNumber}
-                placeHolder="Phone Number"
+                image={Mail}
+                value={Email}
+                onChange={setEmail}
+                placeHolder="Email"
               />
               <AuthInput
                 image={Lock}

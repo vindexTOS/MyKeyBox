@@ -1,5 +1,5 @@
 export type registrationType = {
-  PhoneNumber: string;
+  Email: string;
   BoxUniqueCode: string;
 };
 
