@@ -6,10 +6,11 @@ type AuthInputType = {
   value: string;
   placeHolder: string;
   onChange: React.Dispatch<React.SetStateAction<string>>;
+  type?: boolean;
 };
 
 const AuthInput = (data: AuthInputType) => {
-  const { image, value, onChange, placeHolder } = data;
+  const { image, value, onChange, placeHolder, type } = data;
   return (
     <View style={styles.inputWrapper}>
       <Image style={styles.icon} source={image} />
@@ -20,6 +21,7 @@ const AuthInput = (data: AuthInputType) => {
         placeholder={`${placeHolder}`}
         value={value}
         onChangeText={onChange}
+        secureTextEntry={type}
       />
     </View>
   );

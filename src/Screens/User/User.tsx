@@ -1,24 +1,41 @@
-import { View, Text, StyleSheet, Pressable } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Pressable,
+  TouchableWithoutFeedback,
+} from "react-native";
 import React, { useEffect } from "react";
 import { UseUserContext } from "../../Context/UserContext";
 import UserNav from "./UserNav";
 import List from "./List";
 export default function User() {
-  const { logout, state } = UseUserContext();
+  const { logout, state, dispatch } = UseUserContext();
   // TO DO LATER make switch statment navigation if there is any other component for users
-  return (
-    <View>
-      <UserNav />
-      {state.dropDownLogOut && (
-        <View style={styles.selectDropDown}>
-          <Pressable style={styles.logoutBtn} onPress={logout}>
-            <Text style={styles.logOutText}>Log Out</Text>
-          </Pressable>
-        </View>
-      )}
 
-      <List />
-    </View>
+  const handleOutsideClick = () => {
+    if (state.dropDownLogOut) {
+      dispatch({
+        type: "set_drop_down_log_out",
+        payload: false,
+      });
+    }
+  };
+  return (
+    <TouchableWithoutFeedback onPress={handleOutsideClick}>
+      <View>
+        <UserNav />
+        {state.dropDownLogOut && (
+          <View style={styles.selectDropDown}>
+            <Pressable style={styles.logoutBtn} onPress={logout}>
+              <Text style={styles.logOutText}>Log Out</Text>
+            </Pressable>
+          </View>
+        )}
+
+        <List />
+      </View>
+    </TouchableWithoutFeedback>
   );
 }
 

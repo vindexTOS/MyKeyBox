@@ -5,6 +5,10 @@ import {
   StyleSheet,
   ActivityIndicator,
   Image,
+  KeyboardAvoidingView,
+  Keyboard,
+  Platform,
+  TouchableWithoutFeedback,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { ErrorPopup, SuccessPopup } from "../../Components/Status/Status";
@@ -60,63 +64,75 @@ export default function Login() {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.headerTitle}>
-        <Text style={{ fontSize: 26, fontWeight: "900" }}>Welcome Back</Text>
-        <Text style={{ fontSize: 18 }}> Login back into your account</Text>
-      </View>
-      {isPending && <ActivityIndicator />}
-
-      {isError && <ErrorPopup message={errorMsg} onClose={cleanUpStatus} />}
-      {/* {isSuccess && (
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+    >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={styles.inner}>
+          <View style={styles.headerTitle}>
+            <Text style={{ fontSize: 26, fontWeight: "900" }}>
+              Welcome Back
+            </Text>
+            <Text style={{ fontSize: 18 }}> Login back into your account</Text>
+          </View>
+          {isPending && <ActivityIndicator />}
+          {isError && <ErrorPopup message={errorMsg} onClose={cleanUpStatus} />}
+          {/* {isSuccess && (
         <SuccessPopup message={succsessMsg} onClose={cleanUpStatus} />
       )} */}
-      <View style={styles.formWrapper}>
-        <Image style={styles.Logo} source={Logo} />
+          <View style={styles.formWrapper}>
+            <Image style={styles.Logo} source={Logo} />
 
-        <Text style={styles.title}>Login</Text>
-        <View
-          style={{
-            paddingBottom: 6,
-          }}
-        >
-          <AuthInput
-            image={Mail}
-            value={email}
-            onChange={setEmail}
-            placeHolder="E-mail"
-          />
-          <AuthInput
-            image={Lock}
-            value={password}
-            onChange={setPasswored}
-            placeHolder="Password"
-          />
-          <Text
-            style={{
-              color: "white",
-              marginLeft: 210,
-              fontSize: 15,
-              fontWeight: "700",
-            }}
-          >
-            Forgot Password?
-          </Text>
+            <Text style={styles.title}>Login</Text>
+            <View
+              style={{
+                paddingBottom: 6,
+              }}
+            >
+              <AuthInput
+                image={Mail}
+                value={email}
+                onChange={setEmail}
+                placeHolder="E-mail"
+              />
+              <AuthInput
+                image={Lock}
+                value={password}
+                onChange={setPasswored}
+                placeHolder="Password"
+                type={true}
+              />
+              <Text
+                style={{
+                  position: "absolute",
+                  top: 155,
+
+                  color: "white",
+                  marginLeft: 210,
+                  fontSize: 15,
+                  fontWeight: "700",
+                }}
+              >
+                Forgot Password?
+              </Text>
+            </View>
+            <TouchableOpacity style={styles.button} onPress={handleSignUp}>
+              <Text style={styles.buttonText}>LOGIN</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.logInTextWrapper}>
+            <Text>Don't have an account yet ? </Text>
+            <Text
+              onPress={() => navigation.navigate(`Registration`)}
+              style={{ fontSize: 18, color: "#2c8ffa", fontWeight: "800" }}
+            >
+              Join Now
+            </Text>
+          </View>
         </View>
-        <TouchableOpacity style={styles.button} onPress={handleSignUp}>
-          <Text style={styles.buttonText}>LOGIN</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.logInTextWrapper}>
-        <Text>Don't have an account yet ? </Text>
-        <Text
-          onPress={() => navigation.navigate(`Registration`)}
-          style={{ fontSize: 18, color: "#2c8ffa", fontWeight: "800" }}
-        >
-          Join Now
-        </Text>
-      </View>
-    </View>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -127,11 +143,16 @@ const styles = StyleSheet.create({
     width: "100%",
     backgroundColor: "white",
     alignItems: "center",
-
-    paddingTop: 60,
-    gap: 20,
   },
-  headerTitle: { marginRight: 120, marginBottom: 50 },
+  inner: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 20,
+    backgroundColor: "white",
+    width: "100%",
+  },
+  headerTitle: { marginRight: 10, marginBottom: 60, width: "100%" },
   Logo: {
     width: 150,
     height: 150,
@@ -147,7 +168,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     height: "70%",
-    width: "90%",
+    width: "100%",
     borderTopLeftRadius: 90,
     borderTopRightRadius: 90,
     borderBottomLeftRadius: 20,

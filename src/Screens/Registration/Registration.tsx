@@ -8,6 +8,10 @@ import {
   StyleSheet,
   ActivityIndicator,
   Image,
+  KeyboardAvoidingView,
+  Keyboard,
+  Platform,
+  TouchableWithoutFeedback,
 } from "react-native";
 import { RegistrationPostRequest } from "../../API/Auth";
 import { registrationType } from "../../types/Auth-types";
@@ -57,55 +61,62 @@ export default function Registration() {
     }
   }, [state]);
   return (
-    <View style={styles.container}>
-      <View style={styles.headerTitle}>
-        <Text style={{ fontSize: 26, fontWeight: "900" }}>
-          Welcome in MyKeyBox
-        </Text>
-        <Text style={{ fontSize: 18 }}> Sigup into your account</Text>
-      </View>
-      {isPending && <ActivityIndicator />}
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+    >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={styles.inner}>
+          <View style={styles.headerTitle}>
+            <Text style={{ fontSize: 26, fontWeight: "900" }}>
+              Welcome in MyKeyBox
+            </Text>
+            <Text style={{ fontSize: 18 }}> Sigup into your account</Text>
+          </View>
+          {isPending && <ActivityIndicator />}
 
-      {isError && <ErrorPopup message={errorMsg} onClose={cleanUpStatus} />}
-      {isSuccess && (
-        <SuccessPopup message={succsessMsg} onClose={cleanUpStatus} />
-      )}
-      <View style={styles.formWrapper}>
-        <Image style={styles.Logo} source={Logo} />
+          {isError && <ErrorPopup message={errorMsg} onClose={cleanUpStatus} />}
+          {isSuccess && (
+            <SuccessPopup message={succsessMsg} onClose={cleanUpStatus} />
+          )}
+          <View style={styles.formWrapper}>
+            <Image style={styles.Logo} source={Logo} />
 
-        <Text style={styles.title}>Sign Up</Text>
-        <View
-          style={{
-            paddingBottom: 6,
-          }}
-        >
-          <AuthInput
-            image={Phone}
-            value={PhoneNumber}
-            onChange={setPhoneNumber}
-            placeHolder="Phone Number"
-          />
-          <AuthInput
-            image={Lock}
-            value={BoxUniqueCode}
-            onChange={setLockerCode}
-            placeHolder="Locker Code"
-          />
+            <Text style={styles.title}>Sign Up</Text>
+            <View
+              style={{
+                paddingBottom: 6,
+              }}
+            >
+              <AuthInput
+                image={Phone}
+                value={PhoneNumber}
+                onChange={setPhoneNumber}
+                placeHolder="Phone Number"
+              />
+              <AuthInput
+                image={Lock}
+                value={BoxUniqueCode}
+                onChange={setLockerCode}
+                placeHolder="Locker Code"
+              />
+            </View>
+            <TouchableOpacity style={styles.button} onPress={handleSignUp}>
+              <Text style={styles.buttonText}>Sign Up</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.logInTextWrapper}>
+            <Text>Already have an accoutn ? </Text>
+            <Text
+              onPress={() => navigation.navigate(`Login`)}
+              style={{ fontSize: 18, color: "#2c8ffa", fontWeight: "800" }}
+            >
+              Log In
+            </Text>
+          </View>
         </View>
-        <TouchableOpacity style={styles.button} onPress={handleSignUp}>
-          <Text style={styles.buttonText}>Sign Up</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.logInTextWrapper}>
-        <Text>Already have an accoutn ? </Text>
-        <Text
-          onPress={() => navigation.navigate(`Login`)}
-          style={{ fontSize: 18, color: "#2c8ffa", fontWeight: "800" }}
-        >
-          Log In
-        </Text>
-      </View>
-    </View>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 }
 // #2c8ffa
@@ -116,10 +127,16 @@ const styles = StyleSheet.create({
     width: "100%",
     backgroundColor: "white",
     alignItems: "center",
-    paddingTop: 60,
-    gap: 20,
   },
-  headerTitle: { marginRight: 70, marginBottom: 30 },
+  inner: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 20,
+    backgroundColor: "white",
+    width: "100%",
+  },
+  headerTitle: { marginRight: 10, marginBottom: 50, width: "100%" },
   Logo: {
     width: 150,
     height: 150,
@@ -135,7 +152,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     height: "70%",
-    width: "90%",
+    width: "100%",
     borderTopLeftRadius: 90,
     borderTopRightRadius: 90,
     borderBottomLeftRadius: 20,

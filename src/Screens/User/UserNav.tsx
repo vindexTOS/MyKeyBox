@@ -1,4 +1,11 @@
-import { View, Text, Image, StyleSheet, Pressable } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  Pressable,
+  TouchableWithoutFeedback,
+} from "react-native";
 import React, { useState } from "react";
 import { UseUserContext } from "../../Context/UserContext";
 // @ts-ignore
@@ -13,30 +20,43 @@ import DropDown from "../../../assets/ICONS/downward-arrow.png";
 import UpArrow from "../../../assets/ICONS/up-arrow.png";
 export default function UserNav() {
   const { logout, state, dispatch } = UseUserContext();
-  const [dropDownSelect, setDropDownSelect] = useState(false);
-  return (
-    <View style={styles.mainConteiner}>
-      <View style={styles.mainView}>
-        <Pressable
-          onPress={() =>
-            dispatch({
-              type: "set_drop_down_log_out",
-              payload: !state.dropDownLogOut,
-            })
-          }
-          style={styles.userInfoWrapper}
-        >
-          <Image style={styles.avatar} source={Logo} />
-          <Text> {state.decodedUser.email}</Text>
-          <Image
-            style={styles.arrowIcon}
-            source={!state.dropDownLogOut ? DropDown : UpArrow}
-          />
-        </Pressable>
 
-        <Image style={styles.bellIcon} source={Bell} />
+  const handleOutsideClick = () => {
+    if (state.dropDownLogOut) {
+      dispatch({
+        type: "set_drop_down_log_out",
+        payload: false,
+      });
+    }
+  };
+
+  const handlePress = () => {
+    dispatch({
+      type: "set_drop_down_log_out",
+      payload: !state.dropDownLogOut,
+    });
+  };
+
+  return (
+    <TouchableWithoutFeedback onPress={handleOutsideClick}>
+      <View style={styles.mainConteiner}>
+        <View style={styles.mainView}>
+          <Pressable
+            onPress={() => handlePress()}
+            style={styles.userInfoWrapper}
+          >
+            <Image style={styles.avatar} source={Logo} />
+            <Text> {state.decodedUser.email}</Text>
+            <Image
+              style={styles.arrowIcon}
+              source={!state.dropDownLogOut ? DropDown : UpArrow}
+            />
+          </Pressable>
+
+          <Image style={styles.bellIcon} source={Bell} />
+        </View>
       </View>
-    </View>
+    </TouchableWithoutFeedback>
   );
 }
 const styles = StyleSheet.create({
