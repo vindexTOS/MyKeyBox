@@ -16,7 +16,7 @@ Ensure the end folder structure is set up like this: [Example Structure](https:/
 
 ### Step 1: Create New Folder
 
-Create a new folder and name it `apk-convertor`. Download `bundletool.jar` from [Google Bundletool Releases](https://github.com/google/bundletool/releases). (Remove version numbers next to it ex 1.2.5  for convenience and keep only `bundletool.jar`)
+Create a new folder and name it `apk-convertor`. Download `bundletool.jar` from [Bundletool](https://github.com/google/bundletool/releases). (Remove version numbers next to it ex 1.2.5  for convenience and keep only `bundletool.jar`)
 
 ### Step 2: Dependency Check
 
@@ -40,9 +40,9 @@ save it on apk-convertor folder with bundletool.jar
 ### step 5: build APKS file 
 (keep in mind this is not apk file, but apks )
 go to apk-convertor directory and run 
-```
-java -jar bundletool.jar build-apks --bundle=filename.aab --output=newfilename.apks --mode=universal
-```
+ 
+`java -jar bundletool.jar build-apks --bundle=filename.aab --output=newfilename.apks --mode=universal`
+ 
 (filename.abb should be your expo.dev downloaded aab file, you can name newfilename.apks what ever you want) 
 this will create apks file on your directory
 
@@ -59,9 +59,9 @@ this will create apks file on your directory
 ### step 7:keystore
  you have to generate keystore for apk release 
 run this command on apk-convertor directory : 
-```
-keytool -genkeypair -v -keystore my-release-key.jks -keyalg RSA -keysize 2048 -validity 10000 -alias my-key-alias
-```
+ 
+`keytool -genkeypair -v -keystore my-release-key.jks -keyalg RSA -keysize 2048 -validity 10000 -alias my-key-alias`
+ 
 it will ask you to create password of 6 cheractors, make it and remember it 
 it will ask you couple of more questions just answere them 
 this will create my-realase-key.jks file 
@@ -70,17 +70,17 @@ this will create my-realase-key.jks file
 
 ### step 8 : Preper Convertor APKS to APK
 on apk-convertor directory run: 
-``` 
-java -jar bundletool.jar build-apks --bundle=myaabname.aab  --output=myapksname.apks --mode=universal --ks=my-release-key.jks --ks-key-alias=my-key-alias --ks-pass=pass:YOUR_KEYPASS --key-pass=pass:YOUR_KEYPASS
-```
+ 
+`java -jar bundletool.jar build-apks --bundle=myaabname.aab  --output=myapksname.apks --mode=universal --ks=my-release-key.jks --ks-key-alias=my-key-alias --ks-pass=pass:YOUR_KEYPASS --key-pass=pass:YOUR_KEYPASS
+`
 (change myapksname.apks, myaabname.aab and YOUR_KEYPASS with file names and password that you made) 
 
 ### step 9: Convert APKS to APK
 (you might need your exect directory names for this, copy your apk-convertor url and rename your this example files with your own file names) 
 run:
-```
+ `
  java -jar D:\apk-convertor\bundletool.jar extract-apks --apks=D:\apk-convertor\ myapksname.apks --device-spec=D:\apk-convertor\convertor.json
-```
+ `
 it will save new apk file in temp folder and give you url where it was saved 
 
   
@@ -90,9 +90,9 @@ The APKs have been extracted in the directory: C:\Users\User\AppData\Local\Temp\
 
  you can make new folder named apk_out and use this code isntad ( change directorys and file names as above for your own computer) 
 after running this new apk file will be saved on apk_out folder instad of temp folder 
-```
+ `
 java -jar "F:\gios projects\abb-to-apk-convertor\bundletool.jar" extract-apks --apks="F:\gios projects\abb-to-apk-convertor\MyKeyBox.apks" --device-spec="F:\gios projects\abb-to-apk-convertor\convertor.json" --output-dir="F:\gios projects\abb-to-apk-convertor\apk_out"
-```
+ `
 ### step 10: download new created apk file in to your android and just install it 
 
 
