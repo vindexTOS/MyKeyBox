@@ -1,4 +1,4 @@
-# <span style="color:blue"> Running app </span>
+# <h1 style="color:blue"> Running the app </h1>
 ## Must have:
 - Global Installations:
   - Node.js: [Node.js](https://nodejs.org/)
