@@ -12,7 +12,7 @@ to install packages.
 ### step 2: start
 After the packages are installed, run the following command in the terminal: `yarn start` or `npm start`, depending on the package manager you used.
 
-Open the Android Studio emulator and press `a` in the terminal. This will automatically open the Expo app on the emulator. Alternatively, you can download the Expo Go app on your iPhone or Android device and scan the Expo QR code displayed in the terminal with your physical device.
+Open the Android Studio emulator and press `a` in the terminal. This will automatically open the Expo app on the emulator. Alternatively, you can download the Expo Go app on your iPhone or Android device and scan the Expo QR code displayed in the terminal with your physical device. ( in this case computer that is running the app and the device that is trying to run the app with QR code should be on same network)
  
   
 
