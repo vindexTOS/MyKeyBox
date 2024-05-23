@@ -37,13 +37,13 @@ npx expo install –-check
 This will check and fix any dependency issues.
 ```
  
-### Step 3: Build AAB
+### Step 2: Build AAB
 
 Stay in your app directory and run: `eas build -p android`
 it will ask you to enter your expo dev account email and password
 this will build aab file for your app on your https://expo.dev/
 
-### step 4:
+### step 3:
 
 download build aab file from https://expo.dev/ , ex name: `application-800bd69f-8a8f-441b-9f6b-d15fecd07728.aab`
 we can now upload this file to play store 
