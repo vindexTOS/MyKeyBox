@@ -5,11 +5,11 @@
   - Expo CLI: `npm i expo-cli`
   - Android Studio (recommended)
 
-# step 1 : package manager
+### step 1 : package manager
 The app is built using `yarn`. If you prefer to use `npm`, remove the `yarn.lock` file from the app directory and run `npm install`. Otherwise, run `yarn`
 to install packages.
 
-#step 2: start
+### step 2: start
 After the packages are installed, run the following command in the terminal: `yarn start` or `npm start`, depending on the package manager you used.
 
 Open the Android Studio emulator and press `a` in the terminal. This will automatically open the Expo app on the emulator. Alternatively, you can download the Expo Go app on your iPhone or Android device and scan the Expo QR code displayed in the terminal with your physical device.
