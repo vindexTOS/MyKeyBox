@@ -1,4 +1,59 @@
-# Building App For Android
+# <span style="color:blue"> Running app </span>
+## Must have:
+- Global Installations:
+  - Node.js: [Node.js](https://nodejs.org/)
+  - Expo CLI: `npm i expo-cli`
+  - Android Studio (recommended)
+
+# step 1 : package manager
+The app is built using `yarn`. If you prefer to use `npm`, remove the `yarn.lock` file from the app directory and run `npm install`. Otherwise, run `yarn`
+to install packages.
+
+#step 2: start
+After the packages are installed, run the following command in the terminal: `yarn start` or `npm start`, depending on the package manager you used.
+
+Open the Android Studio emulator and press `a` in the terminal. This will automatically open the Expo app on the emulator. Alternatively, you can download the Expo Go app on your iPhone or Android device and scan the Expo QR code displayed in the terminal with your physical device.
+ 
+  
+
+# <span style="color:blue">Building AAB For Android Play Store</span>
+## Must have:
+
+- Expo Dev Account: [Expo Dev](https://expo.dev/)
+- Global Installations:
+  - Node.js: [Node.js](https://nodejs.org/)
+  - Expo CLI: `npm i expo-cli`
+  - EAS CLI: `npm install -g eas-cli`
+  
+
+
+### Step 1: Dependency Check
+
+Navigate to your React Native app directory and run:
+```
+npx expo-doctor
+npx expo-doctor --fix-dependencies
+npx expo install –-check
+This will check and fix any dependency issues.
+```
+ 
+### Step 3: Build AAB
+
+Stay in your app directory and run: `eas build -p android`
+it will ask you to enter your expo dev account email and password
+this will build aab file for your app on your https://expo.dev/
+
+### step 4:
+
+download build aab file from https://expo.dev/ , ex name: `application-800bd69f-8a8f-441b-9f6b-d15fecd07728.aab`
+we can now upload this file to play store 
+
+
+ 
+
+
+
+# <span style="color:blue">Building APK For Android</span>
 
 ## Must have:
 
