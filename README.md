@@ -41,12 +41,11 @@ This will check and fix any dependency issues.
 
 Stay in your app directory and run: `eas build -p android`
 it will ask you to enter your expo dev account email and password
-this will build aab file for your app on your https://expo.dev/
+this will build aab file for your app on your https://expo.dev/ account
 
 ### step 3:
 
-download build aab file from https://expo.dev/ , ex name: `application-800bd69f-8a8f-441b-9f6b-d15fecd07728.aab`
-we can now upload this file to play store 
+download build aab file from https://expo.dev/, you can upload this file to play store
 
 
  
