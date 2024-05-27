@@ -8,6 +8,7 @@ import {
 } from "react";
 import jwt_decode from "jwt-decode";
 import { decodedUserType } from "../types/Auth-types";
+import ListNavigator from "../Screens/User/ListNavigator";
 
 type UserContextProviderProps = {
   children: ReactNode;
@@ -17,6 +18,7 @@ type State = {
   decodedUser: decodedUserType | any;
   token: string;
   dropDownLogOut: boolean;
+  listNavigation: string;
 };
 
 type Action = {
@@ -38,6 +40,7 @@ export const UserContextProvider = ({ children }: UserContextProviderProps) => {
     decodedUser: {},
     token: "",
     dropDownLogOut: false,
+    listNavigation: "",
   };
   const reducer = (state: State, action: Action) => {
     switch (action.type) {
@@ -47,6 +50,8 @@ export const UserContextProvider = ({ children }: UserContextProviderProps) => {
         return { ...state, token: action.payload };
       case "set_drop_down_log_out":
         return { ...state, dropDownLogOut: action.payload };
+      case "set_list_navigator":
+        return { ...state, listNavigation: action.payload };
       default:
         return state;
     }
@@ -69,6 +74,7 @@ export const UserContextProvider = ({ children }: UserContextProviderProps) => {
     await AsyncStorage.setItem("token", "");
     dispatch({ type: "decode_user", payload: {} });
   };
+
   return (
     <Context.Provider value={{ state, dispatch, logout, decodeUser }}>
       {children}

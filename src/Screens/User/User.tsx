@@ -9,6 +9,8 @@ import React, { useEffect } from "react";
 import { UseUserContext } from "../../Context/UserContext";
 import UserNav from "./UserNav";
 import List from "./List";
+import BurgerMenu from "../../Components/Menus/BurgetMenu";
+import ListNavigator from "./ListNavigator";
 export default function User() {
   const { logout, state, dispatch } = UseUserContext();
   // TO DO LATER make switch statment navigation if there is any other component for users
@@ -22,18 +24,11 @@ export default function User() {
     }
   };
   return (
-    <TouchableWithoutFeedback onPress={handleOutsideClick}>
+    <TouchableWithoutFeedback>
       <View>
         <UserNav />
-        {state.dropDownLogOut && (
-          <View style={styles.selectDropDown}>
-            <Pressable style={styles.logoutBtn} onPress={logout}>
-              <Text style={styles.logOutText}>Log Out</Text>
-            </Pressable>
-          </View>
-        )}
 
-        <List />
+        <ListNavigator />
       </View>
     </TouchableWithoutFeedback>
   );

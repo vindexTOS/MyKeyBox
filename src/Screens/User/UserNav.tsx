@@ -18,6 +18,7 @@ import Logo from "../../../assets/ICONS/logo-dark.png";
 import DropDown from "../../../assets/ICONS/downward-arrow.png";
 // @ts-ignore
 import UpArrow from "../../../assets/ICONS/up-arrow.png";
+import BurgerMenu from "../../Components/Menus/BurgetMenu";
 export default function UserNav() {
   const { logout, state, dispatch } = UseUserContext();
 
@@ -47,13 +48,12 @@ export default function UserNav() {
           >
             <Image style={styles.avatar} source={Logo} />
             <Text> {state.decodedUser.email}</Text>
-            <Image
-              style={styles.arrowIcon}
-              source={!state.dropDownLogOut ? DropDown : UpArrow}
-            />
           </Pressable>
 
-          <Image style={styles.bellIcon} source={Bell} />
+          <View style={styles.iconWrapper}>
+            <Image style={styles.bellIcon} source={Bell} />
+            <BurgerMenu />
+          </View>
         </View>
       </View>
     </TouchableWithoutFeedback>
@@ -95,4 +95,12 @@ const styles = StyleSheet.create({
   },
   avatar: { width: 40, height: 40 },
   bellIcon: { width: 40, height: 40, marginRight: 20 },
+  iconWrapper: {
+    width: "30%",
+    gap: 20,
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+  },
 });

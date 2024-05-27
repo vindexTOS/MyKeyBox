@@ -1,16 +1,17 @@
+import React, { useState, useEffect, useRef } from "react";
 import {
+  KeyboardAvoidingView,
+  StyleSheet,
   View,
   Text,
-  TouchableOpacity,
-  StyleSheet,
-  ActivityIndicator,
-  Image,
-  KeyboardAvoidingView,
-  Keyboard,
-  Platform,
   TouchableWithoutFeedback,
+  Keyboard,
+  TouchableOpacity,
+  Image,
+  ActivityIndicator,
+  Animated,
+  Platform,
 } from "react-native";
-import React, { useEffect, useState } from "react";
 import { ErrorPopup, SuccessPopup } from "../../Components/Status/Status";
 import { loginType } from "../../types/Auth-types";
 import { useMutation } from "@tanstack/react-query";
@@ -63,18 +64,29 @@ export default function Login() {
     mutation.reset();
   };
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
+  const containerHeight = useState(new Animated.Value(1))[0];
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
       "keyboardDidShow",
       () => {
         setKeyboardVisible(true);
+        Animated.timing(containerHeight, {
+          toValue: 0.7,
+          duration: 300,
+          useNativeDriver: false,
+        }).start();
       }
     );
     const keyboardDidHideListener = Keyboard.addListener(
       "keyboardDidHide",
       () => {
         setKeyboardVisible(false);
+        Animated.timing(containerHeight, {
+          toValue: 1,
+          duration: 300,
+          useNativeDriver: false,
+        }).start();
       }
     );
 
@@ -83,6 +95,23 @@ export default function Login() {
       keyboardDidShowListener.remove();
     };
   }, []);
+  const slideAnim = useRef(new Animated.Value(-100)).current;
+  useEffect(() => {
+    slideAnim.setValue(0);
+    // Run the animation
+    const animation = Animated.timing(slideAnim, {
+      toValue: 1,
+      duration: 5300,
+      useNativeDriver: true,
+    });
+
+    animation.start();
+
+    // Clean up animation on component unmount
+    return () => {
+      animation.stop();
+    };
+  }, [isKeyboardVisible, slideAnim]);
   return (
     <KeyboardAvoidingView
       style={
@@ -91,10 +120,11 @@ export default function Login() {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View
-          style={
-            !isKeyboardVisible ? styles.inner : styles.whenKeyBoardOpenInner
-          }
+        <Animated.View
+          style={[
+            !isKeyboardVisible ? styles.inner : styles.whenKeyBoardOpenInner,
+            { transform: [{ translateY: slideAnim }] },
+          ]}
         >
           {!isKeyboardVisible && (
             <View style={styles.headerTitle}>
@@ -142,7 +172,7 @@ export default function Login() {
                 style={{
                   position: "absolute",
                   top: 155,
-
+                  right: 20,
                   color: "white",
                   width: "95%",
 
@@ -171,7 +201,7 @@ export default function Login() {
               Join Now
             </Text>
           </View>
-        </View>
+        </Animated.View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
   );
@@ -189,7 +219,7 @@ const styles = StyleSheet.create({
     display: "flex",
     height: "100%",
     width: "100%",
-    backgroundColor: "#89cff0",
+    backgroundColor: "#2c8ffa",
     alignItems: "center",
   },
   inner: {
@@ -198,6 +228,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 20,
     backgroundColor: "white",
+
     width: "100%",
   },
   whenKeyBoardOpenInner: {
@@ -237,9 +268,10 @@ const styles = StyleSheet.create({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    height: "70%",
+    height: "100%",
     width: "100%",
   },
+
   title: {
     fontSize: 34,
     fontWeight: "bold",
