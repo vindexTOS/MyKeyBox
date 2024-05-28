@@ -7,7 +7,7 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 import React, { useState } from "react";
-import { UseUserContext } from "../../Context/UserContext";
+import { UseGeneralContext } from "../../Context/GeneralContext";
 // @ts-ignore
 import Bell from "../../../assets/ICONS/bell.png";
 // @ts-ignore
@@ -16,12 +16,16 @@ import UserPhoto from "../../../assets/ICONS/user.png";
 import Logo from "../../../assets/ICONS/logo-dark.png";
 // @ts-ignore
 import DropDown from "../../../assets/ICONS/downward-arrow.png";
-// @ts-ignore
-import UpArrow from "../../../assets/ICONS/up-arrow.png";
-import BurgerMenu from "../../Components/Menus/BurgetMenu";
-export default function UserNav() {
-  const { logout, state, dispatch } = UseUserContext();
 
+import BurgerMenu from "../../Components/Menus/BurgetMenu";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
+
+type RootParamList = {
+  User: undefined;
+};
+
+export default function UserNav() {
+  const { state, dispatch } = UseGeneralContext();
   const handleOutsideClick = () => {
     if (state.dropDownLogOut) {
       dispatch({
@@ -38,6 +42,20 @@ export default function UserNav() {
     });
   };
 
+  const GoToNotifications = () => {
+    dispatch({
+      type: "set_list_navigator",
+      payload: "notifications",
+    });
+  };
+  const GoToNotBoxList = () => {
+    dispatch({
+      type: "set_list_navigator",
+      payload: "box-list",
+    });
+  };
+  const navigation = useNavigation<NavigationProp<RootParamList>>();
+
   return (
     <TouchableWithoutFeedback onPress={handleOutsideClick}>
       <View style={styles.mainConteiner}>
@@ -46,12 +64,33 @@ export default function UserNav() {
             onPress={() => handlePress()}
             style={styles.userInfoWrapper}
           >
-            <Image style={styles.avatar} source={Logo} />
+            <Pressable onPress={GoToNotBoxList}>
+              <Image style={styles.avatar} source={Logo} />
+            </Pressable>
             <Text> {state.decodedUser.email}</Text>
           </Pressable>
 
           <View style={styles.iconWrapper}>
-            <Image style={styles.bellIcon} source={Bell} />
+            <Pressable onPress={GoToNotifications}>
+              <Image style={styles.bellIcon} source={Bell} />
+              <View
+                style={{
+                  position: "absolute",
+                  backgroundColor: "red",
+                  width: 25,
+                  height: 25,
+                  borderRadius: 50,
+                  padding: 2,
+                  alignItems: "center",
+                  justifyContent: "center",
+                  display: "flex",
+                }}
+              >
+                <Text style={{ color: "white" }}>
+                  {state.notificationCounter}
+                </Text>
+              </View>
+            </Pressable>
             <BurgerMenu />
           </View>
         </View>

@@ -1,5 +1,6 @@
 import { envirement } from "../envirement/env";
 import { ApiManager } from "./ApiManager";
+import { RemoveToken } from "./LogOut";
 
 export const GetBoxesRequest = async ({
   queryKey,
@@ -16,11 +17,15 @@ export const GetBoxesRequest = async ({
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log(res);
+
     return res;
   } catch (error) {
-    console.log(error);
     const err: any = error;
+    console.log(err);
+    if (err.response.status == 401) {
+      RemoveToken();
+    }
+
     throw new Error(err);
   }
 };
@@ -40,11 +45,43 @@ export const GetActiveOrders = async ({
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log(res);
+
     return res;
   } catch (error) {
-    console.log(error);
     const err: any = error;
-    throw new Error(err);
+    console.log(err);
+    if (err.response.status == 401) {
+      RemoveToken();
+      throw new Error(err);
+    }
+  }
+};
+export const GetNotConfirmedOrders = async ({
+  queryKey,
+}: {
+  queryKey: any;
+}): Promise<any> => {
+  const token = queryKey[1];
+
+  if (token) {
+    try {
+      const res: any = await ApiManager("/Dealer/GetNotConfirmedOrders", {
+        method: "GET",
+
+        headers: {
+          ApiKey: envirement.apiKey,
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log(res);
+      return res;
+    } catch (error) {
+      const err: any = error;
+      console.log(err);
+      if (err.response.status == 401) {
+        RemoveToken();
+        throw new Error(err);
+      }
+    }
   }
 };

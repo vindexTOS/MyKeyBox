@@ -4,11 +4,11 @@ import React from "react";
 import Registration from "../Screens/Registration/Registration";
 import Login from "../Screens/Login/Login";
 import User from "../Screens/User/User";
-import { UseUserContext } from "../Context/UserContext";
+import { UseGeneralContext } from "../Context/GeneralContext";
 
 export default function RootNavigation({ children }: any) {
   const Stack = createNativeStackNavigator();
-  const { state } = UseUserContext();
+  const { state } = UseGeneralContext();
   const { decodedUser } = state;
   return (
     <Stack.Navigator>

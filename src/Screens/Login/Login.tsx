@@ -24,9 +24,10 @@ import Lock from "../../../assets/ICONS/lock.png";
 import Logo from "../../../assets/ICONS/logo-dark.png";
 // @ts-ignore
 import Mail from "../../../assets/ICONS/mail.png";
-import { UseUserContext } from "../../Context/UserContext";
+import { UseGeneralContext } from "../../Context/GeneralContext";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 export default function Login() {
-  const { decodeUser } = UseUserContext();
+  const { decodeUser } = UseGeneralContext();
 
   var succsessMsg = "You have been logged in";
   var errorMsg = "Something went wrong, contact support";
@@ -112,6 +113,10 @@ export default function Login() {
       animation.stop();
     };
   }, [isKeyboardVisible, slideAnim]);
+
+  //   Login : Roma@mygps.ge
+
+  // Password : 1569630950
   return (
     <KeyboardAvoidingView
       style={

@@ -7,12 +7,12 @@ import {
   Pressable,
 } from "react-native";
 import { GetActiveOrders } from "../../API/Getlist";
-import { UseUserContext } from "../../Context/UserContext";
+import { UseGeneralContext } from "../../Context/GeneralContext";
 import { useQuery } from "@tanstack/react-query";
-import ActiveOrderModal from "../../Components/Modal/ActiveOrderModal";
+import ActiveOrderModal from "../../Components/Modal/OrderListModal";
 
 export default function ActiveOrders() {
-  const { state, logout } = UseUserContext();
+  const { state, logout } = UseGeneralContext();
 
   const { token } = state;
 
@@ -76,7 +76,11 @@ export default function ActiveOrders() {
           }}
         >
           {singleData.id && (
-            <ActiveOrderModal data={singleData} reSet={setSingleData} />
+            <ActiveOrderModal
+              type={"activeOrders"}
+              data={singleData}
+              reSet={setSingleData}
+            />
           )}
           {data?.data.map((item: any, index: number) => (
             <Pressable

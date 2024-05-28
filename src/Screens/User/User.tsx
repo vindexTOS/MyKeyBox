@@ -6,13 +6,13 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 import React, { useEffect } from "react";
-import { UseUserContext } from "../../Context/UserContext";
+import { UseGeneralContext } from "../../Context/GeneralContext";
 import UserNav from "./UserNav";
 import List from "./List";
 import BurgerMenu from "../../Components/Menus/BurgetMenu";
 import ListNavigator from "./ListNavigator";
 export default function User() {
-  const { logout, state, dispatch } = UseUserContext();
+  const { logout, state, dispatch } = UseGeneralContext();
   // TO DO LATER make switch statment navigation if there is any other component for users
 
   const handleOutsideClick = () => {

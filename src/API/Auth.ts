@@ -31,7 +31,7 @@ export const LoginPostRequest = async (body: loginType): Promise<any> => {
         ApiKey: envirement.apiKey,
       },
     });
-    console.log(res.data);
+
     await AsyncStorage.setItem("token", res.data);
     return res;
   } catch (error) {

@@ -1,10 +1,11 @@
 import React, { useEffect } from "react";
-import { UseUserContext } from "../../Context/UserContext";
+import { UseGeneralContext } from "../../Context/GeneralContext";
 import List from "./List";
 import ActiveOrders from "./ActiveOrders";
+import Notifications from "./Notifications";
 
 function ListNavigator() {
-  const { state } = UseUserContext();
+  const { state } = UseGeneralContext();
 
   useEffect(() => {
     console.log(state.listNavigation);
@@ -14,7 +15,8 @@ function ListNavigator() {
       return <List />;
     case "active-order":
       return <ActiveOrders />;
-
+    case "notifications":
+      return <Notifications />;
     default:
       return <List />;
   }

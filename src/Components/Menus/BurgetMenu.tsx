@@ -12,12 +12,16 @@ import { NativeBaseProvider } from "native-base";
 // @ts-ignore
 import BurgetIcon from "../../../assets/ICONS/default-row.png";
 
-import { UseUserContext } from "../../Context/UserContext";
+import { UseGeneralContext } from "../../Context/GeneralContext";
 
 function BurgerMenu() {
-  const { dispatch, logout } = UseUserContext();
+  const { dispatch, logout, state } = UseGeneralContext();
   const [modalVisible, setModalVisible] = useState(false);
 
+  const NavigationFunction = (payload: string) => {
+    dispatch({ type: "set_list_navigator", payload: payload });
+    setModalVisible(false);
+  };
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={() => setModalVisible(true)}>
@@ -37,25 +41,30 @@ function BurgerMenu() {
           <View style={styles.menuContainer}>
             <Pressable
               style={styles.menuItem}
-              onPress={() => {
-                dispatch({ type: "set_list_navigator", payload: "box-list" });
-                setModalVisible(false);
-              }}
+              onPress={() => NavigationFunction("box-list")}
             >
               <Text style={styles.menuText}>Box List</Text>
             </Pressable>
 
             <Pressable
               style={styles.menuItem}
-              onPress={() => {
-                dispatch({
-                  type: "set_list_navigator",
-                  payload: "active-order",
-                });
-                setModalVisible(false);
-              }}
+              onPress={() => NavigationFunction("active-order")}
             >
+              {/* type: "set_list_navigator", payload: "notifications", */}
               <Text style={styles.menuText}>Active Orders</Text>
+            </Pressable>
+            <Pressable
+              style={styles.menuItem}
+              onPress={() => NavigationFunction("notifications")}
+            >
+              <View style={styles.notificationWrapper}>
+                <Text style={styles.menuText}>Notifications</Text>
+                <View style={styles.notificationStyle}>
+                  <Text style={{ color: "white" }}>
+                    {state.notificationCounter}
+                  </Text>
+                </View>
+              </View>
             </Pressable>
 
             <Pressable
@@ -111,5 +120,24 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "900",
     fontSize: 18,
+  },
+  notificationStyle: {
+    display: "flex",
+
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "green",
+
+    width: 24,
+    height: 24,
+    borderRadius: 50,
+    padding: 2,
+    fontSize: 11,
+  },
+  notificationWrapper: {
+    display: "flex",
+    gap: 5,
+    alignItems: "center",
+    flexDirection: "row",
   },
 });

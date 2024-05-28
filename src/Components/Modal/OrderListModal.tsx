@@ -1,3 +1,4 @@
+import { useMutation } from "@tanstack/react-query";
 import React from "react";
 import {
   Modal,
@@ -7,15 +8,40 @@ import {
   ScrollView,
   StyleSheet,
   Button,
+  ActivityIndicator,
 } from "react-native";
+import { SetStatusOrder } from "../../API/PostRequests";
+import { ErrorPopup, SuccessPopup } from "../Status/Status";
+import { UseGeneralContext } from "../../Context/GeneralContext";
 
 export default function ActiveOrderModal({
   data,
   reSet,
+  type,
 }: {
   data: any;
   reSet: any;
+  type: string;
 }) {
+  const { state, dispatch } = UseGeneralContext();
+  const mutation = useMutation({
+    mutationFn: (dealerCode: string) => {
+      console.log(dealerCode);
+      return SetStatusOrder(dealerCode);
+    },
+  });
+
+  const ConfirmRequest = async () => {
+    await mutation.mutateAsync(data.dealerCode);
+  };
+  const cleanUpStatus = () => {
+    mutation.reset();
+    dispatch({
+      type: "re_trigger_notification",
+      payload: !state.reTriggerNotificationGet,
+    });
+    reSet({});
+  };
   return (
     <Modal
       transparent={true}
@@ -31,7 +57,9 @@ export default function ActiveOrderModal({
           >
             <Text style={styles.closeButtonText}>X</Text>
           </TouchableOpacity>
-          <Text style={styles.modalHeader}>Active Order</Text>
+          <Text style={styles.modalHeader}>
+            {type == "activeOrder" ? "Active Order" : "Notifications"}
+          </Text>
           <ScrollView contentContainerStyle={styles.scrollViewContent}>
             {Object.keys(data).map((key) => (
               <View key={key} style={styles.row}>
@@ -50,8 +78,26 @@ export default function ActiveOrderModal({
               </View>
             ))}
           </ScrollView>
+          {mutation.isPending && <ActivityIndicator />}
+          {mutation.isError && (
+            <ErrorPopup
+              message={"something went wrong"}
+              onClose={cleanUpStatus}
+            />
+          )}
+          {mutation.isSuccess && (
+            <SuccessPopup message={"Confirmed!"} onClose={cleanUpStatus} />
+          )}
+
           <View style={styles.footer}>
             <Button title="Close" onPress={() => reSet({})} />
+            {type == "notifications" && (
+              <Button
+                color={"green"}
+                title="Confirm"
+                onPress={ConfirmRequest}
+              />
+            )}
           </View>
         </View>
       </View>
@@ -125,5 +171,10 @@ const styles = StyleSheet.create({
   },
   footer: {
     marginTop: 20,
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-around",
+    width: "90%",
+    paddingBottom: 3,
   },
 });

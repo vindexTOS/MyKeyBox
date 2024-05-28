@@ -25,9 +25,9 @@ import Mail from "../../../assets/ICONS/mail.png";
 import Logo from "../../../assets/ICONS/logo-dark.png";
 import AuthInput from "../../Components/Inputs/AuthInput";
 import { useNavigation } from "@react-navigation/native";
-import { UseUserContext } from "../../Context/UserContext";
+import { UseGeneralContext } from "../../Context/GeneralContext";
 export default function Registration() {
-  const { state } = UseUserContext();
+  const { state } = UseGeneralContext();
   var succsessMsg =
     "Your account will be validated shortly and you will receive a password and login by email";
   var errorMsg = "Something went wrong, contact support";

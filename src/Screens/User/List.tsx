@@ -10,7 +10,7 @@ import {
 import React, { useEffect, useState } from "react";
 import { GetBoxesRequest } from "../../API/Getlist";
 import { useQuery } from "@tanstack/react-query";
-import { UseUserContext } from "../../Context/UserContext";
+import { UseGeneralContext } from "../../Context/GeneralContext";
 // @ts-ignore
 import ActiveGrid from "../../../assets/ICONS/clicked-grid.png";
 // @ts-ignore
@@ -24,7 +24,7 @@ import Safe from "../../../assets/ICONS/safe.png";
 type GridRowType = "row" | "column";
 
 export default function List() {
-  const { state, logout } = UseUserContext();
+  const { state, logout } = UseGeneralContext();
   const { token } = state;
   const [boxList, setBoxList] = useState<any>([]);
   const [rowToGrid, setRowToGrid] = useState<GridRowType>("row");
