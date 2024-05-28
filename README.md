@@ -1,22 +1,36 @@
 # <h1 style="color:blue"> Running the app </h1>
+
 ## Must have:
+
 - Global Installations:
   - Node.js: [Node.js](https://nodejs.org/)
   - Expo CLI: `npm i expo-cli`
   - Android Studio (recommended)
 
-### step 1 : package manager
+### step 1 : clone the repo
+
+Go to your desired directory and clone the project by running :
+
+```
+
+ git clone https://github.com/mygps-cloud/MyKeyBoxApp.git
+```
+
+or download the zip file
+
+### step 2 : package manager
+
 The app is built using `yarn`. If you prefer to use `npm`, remove the `yarn.lock` file from the app directory and run `npm install`. Otherwise, run `yarn`
 to install packages.
 
-### step 2: start
+### step 3: start
+
 After the packages are installed, run the following command in the terminal: `yarn start` or `npm start`, depending on the package manager you used.
 
 Open the Android Studio emulator and press `a` in the terminal. This will automatically open the Expo app on the emulator. Alternatively, you can download the Expo Go app on your iPhone or Android device and scan the Expo QR code displayed in the terminal with your physical device. ( in this case computer that is running the app and the device that is trying to run the app with QR code should be on same network)
- 
-  
 
 # <span style="color:blue">Building AAB For Android Play Store</span>
+
 ## Must have:
 
 - Expo Dev Account: [Expo Dev](https://expo.dev/)
@@ -24,19 +38,18 @@ Open the Android Studio emulator and press `a` in the terminal. This will automa
   - Node.js: [Node.js](https://nodejs.org/)
   - Expo CLI: `npm i expo-cli`
   - EAS CLI: `npm install -g eas-cli`
-  
-
 
 ### Step 1: Dependency Check
 
 Navigate to your React Native app directory and run:
+
 ```
 npx expo-doctor
 npx expo-doctor --fix-dependencies
 npx expo install –-check
 This will check and fix any dependency issues.
 ```
- 
+
 ### Step 2: Build AAB
 
 Stay in your app directory and run: `eas build -p android`
@@ -46,11 +59,6 @@ this will build aab file for your app on your https://expo.dev/ account
 ### step 3:
 
 download build aab file from https://expo.dev/, you can upload this file to play store
-
-
- 
-
-
 
 # <span style="color:blue">Building APK For Android</span>
 
@@ -165,4 +173,3 @@ java -jar "F:\gios projects\abb-to-apk-convertor\bundletool.jar" extract-apks --
 ```
 
 ### step 10: download new created apk file in to your android and install it
-
