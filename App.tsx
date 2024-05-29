@@ -5,6 +5,7 @@ import { StyleSheet, Text, View } from "react-native";
 import RootNavigation from "./src/Navigation/RootNavigation";
 import TabNavigator from "./src/Navigation/TabNavigator";
 import { GeneralContextProvider } from "./src/Context/GeneralContext";
+import PushNotification from "./src/PushNotifaction";
 const queryClient = new QueryClient();
 
 export default function App() {
@@ -13,6 +14,7 @@ export default function App() {
       <QueryClientProvider client={queryClient}>
         <GeneralContextProvider>
           <RootNavigation />
+
           <TabNavigator />
         </GeneralContextProvider>
       </QueryClientProvider>

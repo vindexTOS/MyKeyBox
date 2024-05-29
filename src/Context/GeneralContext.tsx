@@ -12,6 +12,7 @@ import ListNavigator from "../Screens/User/ListNavigator";
 import { useNavigation } from "@react-navigation/native";
 import { UseQueryResult, useQuery } from "@tanstack/react-query";
 import { GetNotConfirmedOrders } from "../API/Getlist";
+
 type GeneralContextProviderProps = {
   children: ReactNode;
 };

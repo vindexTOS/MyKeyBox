@@ -12,14 +12,18 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "UIBackgroundModes": ["fetch"]
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.giorgidev.MyKeyBox"
+      "package": "com.giorgidev.MyKeyBox",
+      "permissions": ["NOTIFICATIONS"]
     },
     "web": {
       "favicon": "./assets/icon.png"

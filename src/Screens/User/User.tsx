@@ -11,6 +11,8 @@ import UserNav from "./UserNav";
 import List from "./List";
 import BurgerMenu from "../../Components/Menus/BurgetMenu";
 import ListNavigator from "./ListNavigator";
+import PushNotification from "../../PushNotifaction";
+import PushNotf from "../../PushNotifaction";
 export default function User() {
   const { logout, state, dispatch } = UseGeneralContext();
   // TO DO LATER make switch statment navigation if there is any other component for users
@@ -27,7 +29,7 @@ export default function User() {
     <TouchableWithoutFeedback>
       <View>
         <UserNav />
-
+        <PushNotf />
         <ListNavigator />
       </View>
     </TouchableWithoutFeedback>
