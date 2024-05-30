@@ -22,7 +22,7 @@
         "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.giorgidev.MyKeyBox",
+      "package": "MyKeyBox",
       "permissions": ["NOTIFICATIONS"]
     },
     "web": {
