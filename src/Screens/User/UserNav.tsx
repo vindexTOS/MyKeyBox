@@ -8,6 +8,8 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import { UseGeneralContext } from "../../Context/GeneralContext";
+import { UseNotification } from "../../Context/NotficationsContext";
+
 // @ts-ignore
 import Bell from "../../../assets/ICONS/bell.png";
 // @ts-ignore
@@ -26,6 +28,8 @@ type RootParamList = {
 
 export default function UserNav() {
   const { state, dispatch } = UseGeneralContext();
+  const { notificationState } = UseNotification();
+
   const handleOutsideClick = () => {
     if (state.dropDownLogOut) {
       dispatch({
@@ -87,7 +91,7 @@ export default function UserNav() {
                 }}
               >
                 <Text style={{ color: "white" }}>
-                  {state.notificationCounter}
+                  {notificationState.notificationCounter}
                 </Text>
               </View>
             </Pressable>

@@ -9,16 +9,17 @@ import React, { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { UseGeneralContext } from "../../Context/GeneralContext";
 import ActiveOrderModal from "../../Components/Modal/OrderListModal";
+import { UseNotification } from "../../Context/NotficationsContext";
 
 export default function Notifications() {
-  const { state } = UseGeneralContext();
-  const { notificationsData } = state;
+  const { notificationState } = UseNotification();
+
   const [singleData, setSingleData] = useState<any>({});
   useEffect(() => {
     console.log(singleData);
   }, [singleData]);
 
-  if (state.notificationLoading) {
+  if (notificationState.notificationLoading) {
     return <ActivityIndicator />;
   }
   return (
@@ -68,17 +69,17 @@ export default function Notifications() {
           overflow: "scroll",
         }}
       >
-        {singleData.id && (
+        {singleData.dealerCode && (
           <ActiveOrderModal
             type="notifications"
             data={singleData}
             reSet={setSingleData}
           />
         )}
-        {notificationsData.map((item: any, index: number) => (
+        {notificationState.notificationsData.map((item: any, index: number) => (
           <Pressable
             onPress={() => setSingleData(item)}
-            key={item.id}
+            key={item.dealerCode + index}
             style={{
               flexDirection: "row",
               justifyContent: "space-around",

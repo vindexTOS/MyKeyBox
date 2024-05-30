@@ -26,6 +26,7 @@ import Logo from "../../../assets/ICONS/logo-dark.png";
 import Mail from "../../../assets/ICONS/mail.png";
 import { UseGeneralContext } from "../../Context/GeneralContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+
 export default function Login() {
   const { decodeUser } = UseGeneralContext();
 
@@ -51,6 +52,7 @@ export default function Login() {
 
     await mutation.mutateAsync(body);
   };
+
   useEffect(() => {
     if (!isError) {
       if (password && email) {
@@ -61,33 +63,94 @@ export default function Login() {
       }
     }
   }, [isSuccess]);
+
   const cleanUpStatus = () => {
     mutation.reset();
   };
+
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
-  const containerHeight = useState(new Animated.Value(1))[0];
+  const formHeight = useRef(new Animated.Value(0.7)).current;
+  const formBorderRadius = useRef(new Animated.Value(1)).current;
+  const headerOpacity = useRef(new Animated.Value(1)).current;
+  const logoOpacity = useRef(new Animated.Value(1)).current;
+  const footerOpacity = useRef(new Animated.Value(1)).current;
+  const innerPadding = useRef(new Animated.Value(20)).current;
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
       "keyboardDidShow",
       () => {
         setKeyboardVisible(true);
-        Animated.timing(containerHeight, {
-          toValue: 0.7,
-          duration: 300,
-          useNativeDriver: false,
-        }).start();
+        Animated.parallel([
+          Animated.timing(formHeight, {
+            toValue: 1,
+            duration: 300,
+            useNativeDriver: false,
+          }),
+          Animated.timing(formBorderRadius, {
+            toValue: 0,
+            duration: 300,
+            useNativeDriver: false,
+          }),
+          Animated.timing(headerOpacity, {
+            toValue: 0,
+            duration: 300,
+            useNativeDriver: false,
+          }),
+          Animated.timing(logoOpacity, {
+            toValue: 0,
+            duration: 300,
+            useNativeDriver: false,
+          }),
+          Animated.timing(footerOpacity, {
+            toValue: 0,
+            duration: 300,
+            useNativeDriver: false,
+          }),
+          Animated.timing(innerPadding, {
+            toValue: 0,
+            duration: 300,
+            useNativeDriver: false,
+          }),
+        ]).start();
       }
     );
     const keyboardDidHideListener = Keyboard.addListener(
       "keyboardDidHide",
       () => {
         setKeyboardVisible(false);
-        Animated.timing(containerHeight, {
-          toValue: 1,
-          duration: 300,
-          useNativeDriver: false,
-        }).start();
+        Animated.parallel([
+          Animated.timing(formHeight, {
+            toValue: 0.7,
+            duration: 300,
+            useNativeDriver: false,
+          }),
+          Animated.timing(formBorderRadius, {
+            toValue: 1,
+            duration: 300,
+            useNativeDriver: false,
+          }),
+          Animated.timing(headerOpacity, {
+            toValue: 1,
+            duration: 300,
+            useNativeDriver: false,
+          }),
+          Animated.timing(logoOpacity, {
+            toValue: 1,
+            duration: 300,
+            useNativeDriver: false,
+          }),
+          Animated.timing(footerOpacity, {
+            toValue: 1,
+            duration: 300,
+            useNativeDriver: false,
+          }),
+          Animated.timing(innerPadding, {
+            toValue: 20,
+            duration: 300,
+            useNativeDriver: false,
+          }),
+        ]).start();
       }
     );
 
@@ -96,41 +159,45 @@ export default function Login() {
       keyboardDidShowListener.remove();
     };
   }, []);
-  const slideAnim = useRef(new Animated.Value(-100)).current;
-  useEffect(() => {
-    slideAnim.setValue(0);
-    // Run the animation
-    const animation = Animated.timing(slideAnim, {
-      toValue: 1,
-      duration: 5300,
-      useNativeDriver: true,
-    });
+  let formWrapperStyle = {
+    height: formHeight.interpolate({
+      inputRange: [0.7, 1],
+      outputRange: ["70%", "100%"],
+    }),
+    borderTopLeftRadius: formBorderRadius.interpolate({
+      inputRange: [0, 1],
+      outputRange: [0, 90],
+    }),
+    borderTopRightRadius: formBorderRadius.interpolate({
+      inputRange: [0, 1],
+      outputRange: [0, 90],
+    }),
+    borderBottomLeftRadius: formBorderRadius.interpolate({
+      inputRange: [0, 1],
+      outputRange: [0, 20],
+    }),
+    borderBottomRightRadius: formBorderRadius.interpolate({
+      inputRange: [0, 1],
+      outputRange: [0, 90],
+    }),
+  };
+  let innerStyle = {
+    padding: innerPadding.interpolate({
+      inputRange: [0, 20],
+      outputRange: [0, 20],
+    }),
+  };
 
-    animation.start();
-
-    // Clean up animation on component unmount
-    return () => {
-      animation.stop();
-    };
-  }, [isKeyboardVisible, slideAnim]);
-
-  //   Login : Roma@mygps.ge
-
-  // Password : 1569630950
   return (
     <KeyboardAvoidingView
-      style={
-        !isKeyboardVisible ? styles.container : styles.whenKeyBoardOpenContainer
-      }
+      style={styles.container}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <Animated.View
-          style={[
-            !isKeyboardVisible ? styles.inner : styles.whenKeyBoardOpenInner,
-            { transform: [{ translateY: slideAnim }] },
-          ]}
-        >
+      <TouchableWithoutFeedback
+        style={{ width: "100%" }}
+        onPress={Keyboard.dismiss}
+      >
+        <Animated.View style={[styles.inner, innerStyle]}>
           {!isKeyboardVisible && (
             <View style={styles.headerTitle}>
               <Text style={{ fontSize: 26, fontWeight: "900" }}>
@@ -142,29 +209,31 @@ export default function Login() {
           {isPending && <ActivityIndicator />}
           {isError && <ErrorPopup message={errorMsg} onClose={cleanUpStatus} />}
           {/* {isSuccess && (
-        <SuccessPopup message={succsessMsg} onClose={cleanUpStatus} />
-      )} */}
-          <View
-            style={
-              !isKeyboardVisible
-                ? styles.formWrapper
-                : styles.whenKeyBoardFormWrapper
-            }
-          >
-            <Image style={styles.Logo} source={Logo} />
-
-            <Text style={styles.title}>Login</Text>
-            <View
-              style={{
-                position: "relative",
-                paddingBottom: 6,
-              }}
+            <SuccessPopup message={succsessMsg} onClose={cleanUpStatus} />
+          )} */}
+          <Animated.View style={[styles.formWrapper, formWrapperStyle]}>
+            <Animated.View
+              style={[
+                {
+                  opacity: logoOpacity,
+                  position: "absolute",
+                  top: -70,
+                  right: 20,
+                  zIndex: 100,
+                },
+              ]}
             >
+              <Image style={styles.Logo} source={Logo} />
+            </Animated.View>
+            <Text style={styles.title}>Login</Text>
+            <View style={{ position: "relative", paddingBottom: 6 }}>
               <AuthInput
                 image={Mail}
                 value={email}
                 onChange={setEmail}
                 placeHolder="E-mail"
+                onFocus={() => setKeyboardVisible(true)}
+                onBlur={() => setKeyboardVisible(false)}
               />
               <AuthInput
                 image={Lock}
@@ -172,6 +241,8 @@ export default function Login() {
                 onChange={setPasswored}
                 placeHolder="Password"
                 type={true}
+                onFocus={() => setKeyboardVisible(true)}
+                onBlur={() => setKeyboardVisible(false)}
               />
               <Text
                 style={{
@@ -180,7 +251,6 @@ export default function Login() {
                   right: 20,
                   color: "white",
                   width: "95%",
-
                   textAlign: "right",
                   fontSize: 15,
                   fontWeight: "700",
@@ -192,20 +262,22 @@ export default function Login() {
             <TouchableOpacity style={styles.button} onPress={handleSignUp}>
               <Text style={styles.buttonText}>LOGIN</Text>
             </TouchableOpacity>
-          </View>
-          <View style={styles.logInTextWrapper}>
-            <Text>Don't have an account yet ? </Text>
-            <Text
-              onPress={() => navigation.navigate(`Registration`)}
-              style={{
-                fontSize: 18,
-                color: isKeyboardVisible ? "#ffbf00" : "#2c8ffa",
-                fontWeight: "800",
-              }}
-            >
-              Join Now
-            </Text>
-          </View>
+          </Animated.View>
+          {!isKeyboardVisible && (
+            <View style={styles.logInTextWrapper}>
+              <Text>Don't have an account yet ? </Text>
+              <Text
+                onPress={() => navigation.navigate(`Registration`)}
+                style={{
+                  fontSize: 18,
+                  color: "#2c8ffa",
+                  fontWeight: "800",
+                }}
+              >
+                Join Now
+              </Text>
+            </View>
+          )}
         </Animated.View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
@@ -220,39 +292,22 @@ const styles = StyleSheet.create({
     backgroundColor: "#89cff0",
     alignItems: "center",
   },
-  whenKeyBoardOpenContainer: {
-    display: "flex",
-    height: "100%",
-    width: "100%",
-    backgroundColor: "#2c8ffa",
-    alignItems: "center",
-  },
   inner: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
     padding: 20,
     backgroundColor: "white",
-
     width: "100%",
   },
-  whenKeyBoardOpenInner: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 50,
-    backgroundColor: "#2c8ffa",
+  headerTitle: {
+    marginRight: 10,
+    marginBottom: 60,
     width: "100%",
-    height: "100%",
   },
-  headerTitle: { marginRight: 10, marginBottom: 60, width: "100%" },
   Logo: {
     width: 150,
     height: 150,
-    position: "absolute",
-    top: -70,
-    right: 20,
-    zIndex: 100,
   },
   formWrapper: {
     position: "relative",
@@ -260,33 +315,20 @@ const styles = StyleSheet.create({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    height: "70%",
-    width: "100%",
     borderTopLeftRadius: 90,
     borderTopRightRadius: 90,
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 90,
-  },
-  whenKeyBoardFormWrapper: {
-    position: "relative",
-    backgroundColor: "#2c8ffa",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    height: "100%",
     width: "100%",
   },
-
   title: {
     fontSize: 34,
     fontWeight: "bold",
     color: "#fff",
-
     textAlign: "center",
     marginRight: 170,
     marginBottom: 40,
   },
-
   button: {
     backgroundColor: "white",
     color: "black",

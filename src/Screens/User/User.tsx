@@ -13,6 +13,7 @@ import BurgerMenu from "../../Components/Menus/BurgetMenu";
 import ListNavigator from "./ListNavigator";
 import PushNotification from "../../PushNotifaction";
 import PushNotf from "../../PushNotifaction";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 export default function User() {
   const { logout, state, dispatch } = UseGeneralContext();
   // TO DO LATER make switch statment navigation if there is any other component for users
@@ -25,11 +26,20 @@ export default function User() {
       });
     }
   };
+  const cleareNotification = async () => {
+    console.log("cleare notification");
+    await AsyncStorage.setItem("notification-date", "");
+    const notifcation = await AsyncStorage.getItem("notification-date");
+    console.log(notifcation);
+  };
   return (
     <TouchableWithoutFeedback>
       <View>
         <UserNav />
-        <PushNotf />
+        {/* <PushNotf /> */}
+        {/* <Pressable onPress={cleareNotification}>
+          <Text>CLeare </Text>
+        </Pressable> */}
         <ListNavigator />
       </View>
     </TouchableWithoutFeedback>

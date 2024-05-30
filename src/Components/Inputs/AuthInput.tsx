@@ -7,15 +7,19 @@ type AuthInputType = {
   placeHolder: string;
   onChange: React.Dispatch<React.SetStateAction<string>>;
   type?: boolean;
+  onFocus?: any;
+  onBlur?: any;
 };
 
 const AuthInput = (data: AuthInputType) => {
-  const { image, value, onChange, placeHolder, type } = data;
+  const { image, value, onChange, placeHolder, type, onFocus, onBlur } = data;
   return (
     <View style={styles.inputWrapper}>
       <Image style={styles.icon} source={image} />
 
       <TextInput
+        onBlur={onBlur}
+        onFocus={onFocus}
         placeholderTextColor={"white"}
         style={styles.input}
         placeholder={`${placeHolder}`}

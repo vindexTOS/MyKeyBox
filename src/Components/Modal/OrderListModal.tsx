@@ -13,6 +13,7 @@ import {
 import { SetStatusOrder } from "../../API/PostRequests";
 import { ErrorPopup, SuccessPopup } from "../Status/Status";
 import { UseGeneralContext } from "../../Context/GeneralContext";
+import { UseNotification } from "../../Context/NotficationsContext";
 
 export default function ActiveOrderModal({
   data,
@@ -24,6 +25,7 @@ export default function ActiveOrderModal({
   type: string;
 }) {
   const { state, dispatch } = UseGeneralContext();
+  const { notificationState, dispatchNotification } = UseNotification();
   const mutation = useMutation({
     mutationFn: (dealerCode: string) => {
       console.log(dealerCode);
@@ -36,9 +38,9 @@ export default function ActiveOrderModal({
   };
   const cleanUpStatus = () => {
     mutation.reset();
-    dispatch({
+    dispatchNotification({
       type: "re_trigger_notification",
-      payload: !state.reTriggerNotificationGet,
+      payload: !notificationState.reTriggerNotificationGet,
     });
     reSet({});
   };

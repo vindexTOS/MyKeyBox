@@ -6,6 +6,7 @@ import RootNavigation from "./src/Navigation/RootNavigation";
 import TabNavigator from "./src/Navigation/TabNavigator";
 import { GeneralContextProvider } from "./src/Context/GeneralContext";
 import PushNotification from "./src/PushNotifaction";
+import { NotificationProvider } from "./src/Context/NotficationsContext";
 const queryClient = new QueryClient();
 
 export default function App() {
@@ -13,9 +14,11 @@ export default function App() {
     <NavigationContainer>
       <QueryClientProvider client={queryClient}>
         <GeneralContextProvider>
-          <RootNavigation />
+          <NotificationProvider>
+            <RootNavigation />
 
-          <TabNavigator />
+            <TabNavigator />
+          </NotificationProvider>
         </GeneralContextProvider>
       </QueryClientProvider>
       {/* <ActivityIndicator /> */}

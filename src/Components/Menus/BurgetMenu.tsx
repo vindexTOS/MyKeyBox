@@ -13,9 +13,12 @@ import { NativeBaseProvider } from "native-base";
 import BurgetIcon from "../../../assets/ICONS/default-row.png";
 
 import { UseGeneralContext } from "../../Context/GeneralContext";
+import { UseNotification } from "../../Context/NotficationsContext";
 
 function BurgerMenu() {
   const { dispatch, logout, state } = UseGeneralContext();
+  const { notificationState } = UseNotification();
+
   const [modalVisible, setModalVisible] = useState(false);
 
   const NavigationFunction = (payload: string) => {
@@ -61,7 +64,7 @@ function BurgerMenu() {
                 <Text style={styles.menuText}>Notifications</Text>
                 <View style={styles.notificationStyle}>
                   <Text style={{ color: "white" }}>
-                    {state.notificationCounter}
+                    {notificationState.notificationCounter}
                   </Text>
                 </View>
               </View>

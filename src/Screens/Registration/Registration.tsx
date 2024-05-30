@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   View,
   Text,
@@ -11,6 +11,7 @@ import {
   KeyboardAvoidingView,
   Keyboard,
   Platform,
+  Animated,
   TouchableWithoutFeedback,
 } from "react-native";
 import { RegistrationPostRequest } from "../../API/Auth";
@@ -55,7 +56,13 @@ export default function Registration() {
   const cleanUpStatus = () => {
     mutation.reset();
   };
-
+  const formHeight = useRef(new Animated.Value(0.7)).current;
+  const formBorderRadius = useRef(new Animated.Value(1)).current;
+  const headerOpacity = useRef(new Animated.Value(1)).current;
+  const titleSize = useRef(new Animated.Value(1)).current;
+  const logoOpacity = useRef(new Animated.Value(1)).current;
+  const footerOpacity = useRef(new Animated.Value(1)).current;
+  const innerPadding = useRef(new Animated.Value(20)).current;
   useEffect(() => {
     if (state.decodedUser && state.decodedUser.userId) {
       navigation.navigate("User");
@@ -69,12 +76,77 @@ export default function Registration() {
       "keyboardDidShow",
       () => {
         setKeyboardVisible(true);
+        Animated.parallel([
+          Animated.timing(formHeight, {
+            toValue: 1,
+            duration: 300,
+            useNativeDriver: false,
+          }),
+          Animated.timing(formBorderRadius, {
+            toValue: 0,
+            duration: 300,
+            useNativeDriver: false,
+          }),
+          Animated.timing(headerOpacity, {
+            toValue: 0,
+            duration: 300,
+            useNativeDriver: false,
+          }),
+          Animated.timing(logoOpacity, {
+            toValue: 0,
+            duration: 300,
+            useNativeDriver: false,
+          }),
+          Animated.timing(footerOpacity, {
+            toValue: 0,
+            duration: 300,
+            useNativeDriver: false,
+          }),
+          Animated.timing(innerPadding, {
+            toValue: 0,
+            duration: 300,
+            useNativeDriver: false,
+          }),
+        ]).start();
       }
     );
     const keyboardDidHideListener = Keyboard.addListener(
       "keyboardDidHide",
       () => {
         setKeyboardVisible(false);
+        Animated.parallel([
+          Animated.timing(formHeight, {
+            toValue: 0.7,
+            duration: 300,
+            useNativeDriver: false,
+          }),
+          Animated.timing(formBorderRadius, {
+            toValue: 1,
+            duration: 300,
+            useNativeDriver: false,
+          }),
+
+          Animated.timing(headerOpacity, {
+            toValue: 1,
+            duration: 300,
+            useNativeDriver: false,
+          }),
+          Animated.timing(logoOpacity, {
+            toValue: 1,
+            duration: 300,
+            useNativeDriver: false,
+          }),
+          Animated.timing(footerOpacity, {
+            toValue: 1,
+            duration: 300,
+            useNativeDriver: false,
+          }),
+          Animated.timing(innerPadding, {
+            toValue: 20,
+            duration: 300,
+            useNativeDriver: false,
+          }),
+        ]).start();
       }
     );
 
@@ -83,6 +155,42 @@ export default function Registration() {
       keyboardDidShowListener.remove();
     };
   }, []);
+
+  let formWrapperStyle = {
+    height: formHeight.interpolate({
+      inputRange: [0.7, 1],
+      outputRange: ["70%", "100%"],
+    }),
+    borderTopLeftRadius: formBorderRadius.interpolate({
+      inputRange: [0, 1],
+      outputRange: [0, 90],
+    }),
+    borderTopRightRadius: formBorderRadius.interpolate({
+      inputRange: [0, 1],
+      outputRange: [0, 90],
+    }),
+    borderBottomLeftRadius: formBorderRadius.interpolate({
+      inputRange: [0, 1],
+      outputRange: [0, 20],
+    }),
+    borderBottomRightRadius: formBorderRadius.interpolate({
+      inputRange: [0, 1],
+      outputRange: [0, 90],
+    }),
+  };
+  let innerStyle = {
+    padding: innerPadding.interpolate({
+      inputRange: [0, 20],
+      outputRange: [0, 20],
+    }),
+  };
+
+  let titleStyle = {
+    fontSize: titleSize.interpolate({
+      inputRange: [0, 20],
+      outputRange: [0, 20],
+    }),
+  };
   return (
     <KeyboardAvoidingView
       style={
@@ -91,11 +199,7 @@ export default function Registration() {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View
-          style={
-            !isKeyboardVisible ? styles.inner : styles.whenKeyBoardOpenInner
-          }
-        >
+        <Animated.View style={[styles.inner, innerStyle]}>
           {!isKeyboardVisible && (
             <View style={styles.headerTitle}>
               <Text style={{ fontSize: 26, fontWeight: "900" }}>
@@ -110,15 +214,20 @@ export default function Registration() {
           {isSuccess && (
             <SuccessPopup message={succsessMsg} onClose={cleanUpStatus} />
           )}
-          <View
-            style={
-              !isKeyboardVisible
-                ? styles.formWrapper
-                : styles.whenKeyBoardFormWrapper
-            }
-          >
-            <Image style={styles.Logo} source={Logo} />
-
+          <Animated.View style={[styles.formWrapper, formWrapperStyle]}>
+            <Animated.View
+              style={[
+                {
+                  opacity: logoOpacity,
+                  position: "absolute",
+                  top: -70,
+                  right: 20,
+                  zIndex: 100,
+                },
+              ]}
+            >
+              <Image style={styles.Logo} source={Logo} />
+            </Animated.View>
             <Text style={styles.title}>Sign Up</Text>
             <View
               style={{
@@ -130,32 +239,38 @@ export default function Registration() {
                 value={Email}
                 onChange={setEmail}
                 placeHolder="Email"
+                onFocus={() => setKeyboardVisible(true)}
+                onBlur={() => setKeyboardVisible(false)}
               />
               <AuthInput
                 image={Lock}
                 value={BoxUniqueCode}
                 onChange={setLockerCode}
                 placeHolder="Locker Code"
+                onFocus={() => setKeyboardVisible(true)}
+                onBlur={() => setKeyboardVisible(false)}
               />
             </View>
             <TouchableOpacity style={styles.button} onPress={handleSignUp}>
-              <Text style={styles.buttonText}>Sign Up</Text>
+              <Text style={[styles.buttonText]}>Sign Up</Text>
             </TouchableOpacity>
-          </View>
-          <View style={styles.logInTextWrapper}>
-            <Text>Already have an accoutn ? </Text>
-            <Text
-              onPress={() => navigation.navigate(`Login`)}
-              style={{
-                fontSize: 18,
-                color: isKeyboardVisible ? "#ffbf00" : "#2c8ffa",
-                fontWeight: "800",
-              }}
-            >
-              Log In
-            </Text>
-          </View>
-        </View>
+          </Animated.View>
+          {!isKeyboardVisible && (
+            <View style={styles.logInTextWrapper}>
+              <Text>Already have an accoutn ? </Text>
+              <Text
+                onPress={() => navigation.navigate(`Login`)}
+                style={{
+                  fontSize: 18,
+                  color: isKeyboardVisible ? "#ffbf00" : "#2c8ffa",
+                  fontWeight: "800",
+                }}
+              >
+                Log In
+              </Text>
+            </View>
+          )}
+        </Animated.View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
   );
@@ -197,10 +312,6 @@ const styles = StyleSheet.create({
   Logo: {
     width: 150,
     height: 150,
-    position: "absolute",
-    top: -70,
-    right: 20,
-    zIndex: 100,
   },
   formWrapper: {
     position: "relative",
@@ -231,7 +342,7 @@ const styles = StyleSheet.create({
 
     textAlign: "center",
     marginRight: 170,
-    marginBottom: 60,
+    marginBottom: 50,
   },
 
   button: {
