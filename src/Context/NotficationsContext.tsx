@@ -13,6 +13,7 @@ import * as BackgroundFetch from "expo-background-fetch";
 import * as TaskManager from "expo-task-manager";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { usePushNotifications } from "../hooks/usePushNotification";
+import React from "react";
 
 const sendPushNotification = async ({ data }: { data: any }) => {
   const message = {

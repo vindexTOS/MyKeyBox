@@ -1,6 +1,5 @@
 import { envirement } from "../envirement/env";
 import { ApiManager } from "./ApiManager";
-import { RemoveToken } from "./LogOut";
 
 export const GetBoxesRequest = async ({
   queryKey,
@@ -23,7 +22,6 @@ export const GetBoxesRequest = async ({
     const err: any = error;
     console.log(err);
     if (err.response.status == 401) {
-      RemoveToken();
     }
 
     throw new Error(err);
@@ -51,7 +49,6 @@ export const GetActiveOrders = async ({
     const err: any = error;
     console.log(err);
     if (err.response.status == 401) {
-      RemoveToken();
       throw new Error(err);
     }
   }
@@ -79,7 +76,6 @@ export const GetNotConfirmedOrders = async ({
       const err: any = error;
       console.log(err);
       if (err.response.status == 401) {
-        RemoveToken();
         throw new Error(err);
       }
     }
