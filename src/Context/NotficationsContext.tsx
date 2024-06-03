@@ -12,14 +12,7 @@ import * as Notifications from "expo-notifications";
 import * as BackgroundFetch from "expo-background-fetch";
 import * as TaskManager from "expo-task-manager";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: true,
-    shouldSetBadge: false,
-  }),
-});
+import { usePushNotifications } from "../hooks/usePushNotification";
 
 const sendPushNotification = async ({ data }: { data: any }) => {
   const message = {
@@ -60,6 +53,7 @@ type State = {
 
 export const NotificationProvider = ({ children }: NotificationProp) => {
   const { state } = UseGeneralContext();
+  const { expoPushToken, notification } = usePushNotifications(); // Use the custom hook
   const initialState = {
     notificationsData: [],
     notificationCounter: 0,
@@ -84,7 +78,7 @@ export const NotificationProvider = ({ children }: NotificationProp) => {
     reducer,
     initialState
   );
-  const notificationQuerys: UseQueryResult<any, Error> = useQuery({
+  const notificationQuery: UseQueryResult<any, Error> = useQuery({
     queryKey: [
       "notifications",
       state.token,
@@ -94,7 +88,7 @@ export const NotificationProvider = ({ children }: NotificationProp) => {
     refetchInterval: 60000,
     enabled: !!state.token,
   });
-  const PushNotifaction = async (data: any) => {
+  const PushNotification = async (data: any) => {
     await sendPushNotification({ data });
   };
 
@@ -132,8 +126,8 @@ export const NotificationProvider = ({ children }: NotificationProp) => {
 
   useEffect(() => {
     const handleNotifications = async () => {
-      if (notificationQuerys.isSuccess) {
-        const data = notificationQuerys.data.data;
+      if (notificationQuery.isSuccess) {
+        const data = notificationQuery.data.data;
         dispatchNotification({
           type: "set_notifications",
           payload: data,
@@ -150,17 +144,13 @@ export const NotificationProvider = ({ children }: NotificationProp) => {
         const mostRecentNotification: any = await getMostRecentNotification(
           data
         );
-        console.log(
-          "true or false >?>>>>>>>>>>>>>>>>>>> ",
-          mostRecentNotification.isNew
-        );
         if (mostRecentNotification.isNew) {
-          PushNotifaction(mostRecentNotification.data);
+          PushNotification(mostRecentNotification.data);
         }
       }
     };
     handleNotifications();
-  }, [notificationQuerys.isSuccess, notificationQuerys.data]);
+  }, [notificationQuery.isSuccess, notificationQuery.data]);
 
   useEffect(() => {
     const registerBackgroundFetch = async () => {
@@ -170,9 +160,8 @@ export const NotificationProvider = ({ children }: NotificationProp) => {
           stopOnTerminate: false,
           startOnBoot: true,
         });
-        // console.log("Background fetch registered");
       } catch (err) {
-        // console.log("Background fetch failed to register", err);
+        console.error("Background fetch failed to register", err);
       }
     };
 
@@ -182,6 +171,7 @@ export const NotificationProvider = ({ children }: NotificationProp) => {
       BackgroundFetch.unregisterTaskAsync(TASK_NAME);
     };
   }, [state.token]);
+
   return (
     <Context.Provider value={{ notificationState, dispatchNotification }}>
       {children}
@@ -197,6 +187,7 @@ export const UseNotification = () => {
 
   return context;
 };
+
 const TASK_NAME = "BACKGROUND_FETCH";
 
 TaskManager.defineTask(TASK_NAME, async () => {
