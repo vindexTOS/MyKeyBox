@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Button, Platform } from "react-native";
 import * as Notifications from "expo-notifications";
-import * as Permissions from "expo-permissions";
-import Constants from "expo-constants";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({

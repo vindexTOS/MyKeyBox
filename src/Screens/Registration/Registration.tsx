@@ -1,3 +1,14 @@
+// @ts-ignore
+import Lock from "../../../assets/ICONS/lock.png";
+// @ts-ignore
+import Mail from "../../../assets/ICONS/mail.png";
+// @ts-ignore
+import Checkbox from "../../../assets/ICONS/checkedbox.png";
+// @ts-ignore
+import EmptyBox from "../../../assets/ICONS/emptycheckbox.png";
+// @ts-ignore
+import Logo from "../../../assets/ICONS/logo-dark.png";
+
 import { useMutation } from "@tanstack/react-query";
 import React, { useEffect, useRef, useState } from "react";
 import {
@@ -17,16 +28,11 @@ import {
 import { RegistrationPostRequest } from "../../API/Auth";
 import { registrationType } from "../../types/Auth-types";
 import { ErrorPopup, SuccessPopup } from "../../Components/Status/Status";
-// @ts-ignore
-import Lock from "../../../assets/ICONS/lock.png";
-// @ts-ignore
-import Mail from "../../../assets/ICONS/mail.png";
 
-// @ts-ignore
-import Logo from "../../../assets/ICONS/logo-dark.png";
 import AuthInput from "../../Components/Inputs/AuthInput";
 import { useNavigation } from "@react-navigation/native";
 import { UseGeneralContext } from "../../Context/GeneralContext";
+import Terms from "./Terms";
 export default function Registration() {
   const { state } = UseGeneralContext();
   var succsessMsg =
@@ -43,14 +49,20 @@ export default function Registration() {
 
   const [Email, setEmail] = useState("");
   const [BoxUniqueCode, setLockerCode] = useState("");
-
+  const [termsOfServicces, setTermsOfServices] = useState(false);
+  const [termsError, setTermsError] = useState("");
+  const [showTerms, setShowTerms] = useState(false);
   const handleSignUp = async () => {
-    let body = {
-      Email,
-      BoxUniqueCode,
-    };
+    if (termsOfServicces) {
+      let body = {
+        Email,
+        BoxUniqueCode,
+      };
 
-    await mutation.mutateAsync(body);
+      await mutation.mutateAsync(body);
+    } else {
+      setTermsError("Please Agree to Terms and Conditions");
+    }
   };
 
   const cleanUpStatus = () => {
@@ -198,6 +210,13 @@ export default function Registration() {
       }
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
+      {showTerms && (
+        <Terms
+          setShowTerms={setShowTerms}
+          setTermsOfServices={setTermsOfServices}
+          termsOfServicces={termsOfServicces}
+        />
+      )}
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <Animated.View style={[styles.inner, innerStyle]}>
           {!isKeyboardVisible && (
@@ -209,7 +228,12 @@ export default function Registration() {
             </View>
           )}
           {isPending && <ActivityIndicator />}
-
+          {termsError !== "" && (
+            <ErrorPopup
+              message={termsError}
+              onClose={() => setTermsError("")}
+            />
+          )}
           {isError && <ErrorPopup message={errorMsg} onClose={cleanUpStatus} />}
           {isSuccess && (
             <SuccessPopup message={succsessMsg} onClose={cleanUpStatus} />
@@ -254,6 +278,25 @@ export default function Registration() {
             <TouchableOpacity style={styles.button} onPress={handleSignUp}>
               <Text style={[styles.buttonText]}>Sign Up</Text>
             </TouchableOpacity>
+            <View style={styles.termsOfServicesWrapper}>
+              <TouchableOpacity
+                onPress={() => setTermsOfServices(!termsOfServicces)}
+              >
+                <Image
+                  style={styles.checkBox}
+                  source={termsOfServicces ? Checkbox : EmptyBox}
+                />
+              </TouchableOpacity>
+              <Text style={styles.termsOfServiceText}>
+                I agree to the
+                <Text
+                  onPress={() => setShowTerms(true)}
+                  style={styles.termsOfServiceRoute}
+                >
+                  Terms of Use
+                </Text>
+              </Text>
+            </View>
           </Animated.View>
           {!isKeyboardVisible && (
             <View style={styles.logInTextWrapper}>
@@ -358,6 +401,24 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontWeight: "bold",
     fontSize: 16,
+  },
+  termsOfServicesWrapper: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 16,
+    justifyContent: "center",
+    width: "90%",
+    paddingTop: 20,
+  },
+  checkBox: { width: 25, height: 25 },
+  termsOfServiceText: {
+    fontSize: 20,
+    color: "white",
+  },
+  termsOfServiceRoute: {
+    color: "orange",
+    textDecorationLine: "underline",
   },
   logInTextWrapper: {
     display: "flex",

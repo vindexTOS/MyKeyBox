@@ -2,7 +2,7 @@
   "expo": {
     "name": "MyKeyBox",
     "slug": "MyKeyBox",
-    "version": "1.0.1",
+    "version": "1.0.3",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -22,8 +22,9 @@
         "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "MyKeyBox",
-      "permissions": ["NOTIFICATIONS"]
+      "package": "com.giorgidev.MyKeyBox",
+      "permissions": ["NOTIFICATIONS"],
+      "versionCode": 3
     },
     "web": {
       "favicon": "./assets/icon.png"
